@@ -1,427 +1,362 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CosmicVPN | اینترنت بدون مرز</title>
+<title>k⨆Rsh - CS2 & CS:GO Hub</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800&display=swap');
-
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:'Vazirmatn',sans-serif;
+    font-family:'Segoe UI',sans-serif;
 }
 
 body{
-    background:#050816;
+    background:#050505;
     color:white;
     overflow-x:hidden;
 }
 
-/* Stars */
-
-.stars{
+/* Background Effects */
+body::before{
+    content:"";
     position:fixed;
     inset:0;
-    z-index:-10;
     background:
-    radial-gradient(white 1px, transparent 1px);
-    background-size:50px 50px;
-    opacity:.15;
+        radial-gradient(circle at 20% 20%, rgba(255,140,0,.15), transparent 30%),
+        radial-gradient(circle at 80% 30%, rgba(0,174,255,.15), transparent 30%),
+        radial-gradient(circle at 50% 80%, rgba(255,255,255,.04), transparent 40%);
+    z-index:-2;
 }
 
-/* Gradient Glow */
-
-.glow{
+body::after{
+    content:"";
     position:fixed;
-    width:700px;
-    height:700px;
-    border-radius:50%;
-    filter:blur(140px);
-    z-index:-9;
+    inset:0;
+    background:url("https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1920&q=80") center/cover;
+    opacity:.08;
+    z-index:-1;
 }
 
-.glow1{
-    background:#7c3aed;
-    top:-250px;
-    right:-150px;
+/* Navbar */
+nav{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:25px 10%;
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(255,255,255,.08);
 }
 
-.glow2{
-    background:#06b6d4;
-    bottom:-250px;
-    left:-150px;
+.logo{
+    font-size:2rem;
+    font-weight:900;
+    color:#ff8c00;
+    text-shadow:0 0 20px #ff8c00;
 }
 
-/* Planets */
-
-.planet{
-    position:fixed;
-    border-radius:50%;
-    z-index:-8;
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:30px;
 }
 
-.planet1{
-    width:180px;
-    height:180px;
-    background:linear-gradient(135deg,#a855f7,#ec4899);
-    top:120px;
-    left:-50px;
-    box-shadow:0 0 60px #a855f7;
+nav a{
+    color:white;
+    text-decoration:none;
+    transition:.3s;
 }
 
-.planet2{
-    width:120px;
-    height:120px;
-    background:linear-gradient(135deg,#06b6d4,#3b82f6);
-    bottom:120px;
-    right:50px;
-    box-shadow:0 0 50px #06b6d4;
+nav a:hover{
+    color:#00aaff;
 }
 
-/* Comets */
-
-.comet{
-    position:fixed;
-    width:250px;
-    height:2px;
-    background:linear-gradient(
-        to left,
-        rgba(255,255,255,.9),
-        transparent
-    );
-    transform:rotate(-35deg);
-    animation:fly 7s linear infinite;
-    z-index:-7;
-}
-
-.comet:nth-child(2){
-    top:35%;
-    animation-delay:3s;
-}
-
-@keyframes fly{
-    from{
-        transform:translateX(120vw) rotate(-35deg);
-    }
-    to{
-        transform:translateX(-120vw) rotate(-35deg);
-    }
-}
-
-header{
+/* Hero */
+.hero{
     min-height:100vh;
     display:flex;
+    flex-direction:column;
     justify-content:center;
     align-items:center;
     text-align:center;
-    padding:30px;
-}
-
-.hero{
-    max-width:900px;
-}
-
-.badge{
-    display:inline-block;
-    padding:10px 20px;
-    border:1px solid rgba(255,255,255,.2);
-    border-radius:999px;
-    background:rgba(255,255,255,.05);
-    backdrop-filter:blur(10px);
-    margin-bottom:20px;
+    padding:40px;
 }
 
 .hero h1{
-    font-size:clamp(2.8rem,7vw,5.5rem);
-    line-height:1.1;
-    font-weight:800;
+    font-size:6rem;
+    font-weight:900;
+    letter-spacing:4px;
+    color:#fff;
+    text-shadow:
+        0 0 10px #fff,
+        0 0 20px #ff8c00,
+        0 0 40px #ff8c00;
 }
 
-.gradient{
-    background:linear-gradient(
-        90deg,
-        #60a5fa,
-        #a855f7,
-        #ec4899
-    );
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
+.hero h2{
+    margin-top:15px;
+    font-size:2rem;
+    color:#00aaff;
 }
 
 .hero p{
-    margin-top:25px;
-    font-size:1.2rem;
-    color:#d1d5db;
-    line-height:2;
+    margin-top:20px;
+    max-width:800px;
+    color:#bdbdbd;
+    line-height:1.7;
 }
 
-.buttons{
-    margin-top:40px;
+.btns{
+    margin-top:35px;
     display:flex;
-    justify-content:center;
-    gap:15px;
-    flex-wrap:wrap;
+    gap:20px;
 }
 
 .btn{
-    padding:16px 32px;
+    padding:15px 35px;
     border:none;
-    border-radius:14px;
     cursor:pointer;
-    font-size:1rem;
+    font-weight:bold;
+    border-radius:8px;
     transition:.3s;
 }
 
 .primary{
-    background:linear-gradient(
-        135deg,
-        #7c3aed,
-        #06b6d4
-    );
-    color:white;
+    background:#ff8c00;
+    color:black;
+}
+
+.primary:hover{
+    transform:translateY(-4px);
+    box-shadow:0 0 25px #ff8c00;
 }
 
 .secondary{
-    background:rgba(255,255,255,.08);
+    background:transparent;
     color:white;
-    border:1px solid rgba(255,255,255,.1);
+    border:2px solid #00aaff;
 }
 
-.btn:hover{
-    transform:translateY(-4px);
+.secondary:hover{
+    background:#00aaff;
+    color:black;
 }
 
-/* Sections */
-
-section{
-    padding:120px 10%;
+/* Cards */
+.section{
+    padding:100px 10%;
 }
 
 .section-title{
     text-align:center;
-    font-size:2.8rem;
-    margin-bottom:70px;
+    font-size:3rem;
+    margin-bottom:50px;
+    color:#fff;
 }
 
-.cards{
+.grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
     gap:25px;
 }
 
 .card{
-    background:rgba(255,255,255,.05);
-    backdrop-filter:blur(12px);
+    background:rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.08);
+    border-radius:15px;
     padding:30px;
-    border-radius:24px;
-    transition:.4s;
+    transition:.3s;
 }
 
 .card:hover{
-    transform:translateY(-10px);
-    border-color:#8b5cf6;
-}
-
-.icon{
-    font-size:3rem;
-    margin-bottom:15px;
+    transform:translateY(-8px);
+    box-shadow:0 0 25px rgba(255,140,0,.3);
 }
 
 .card h3{
     margin-bottom:15px;
+    color:#ff8c00;
 }
 
 .card p{
-    color:#cbd5e1;
-    line-height:1.9;
+    color:#cfcfcf;
+    line-height:1.6;
 }
 
-/* Scroll Animations */
-
-.reveal{
-    opacity:0;
-    transform:translateY(70px);
-    transition:1s ease;
+/* News */
+.news-item{
+    margin-bottom:25px;
+    padding:25px;
+    border-left:4px solid #00aaff;
+    background:rgba(255,255,255,.03);
 }
 
-.reveal.active{
-    opacity:1;
-    transform:translateY(0);
+.news-item h4{
+    color:#00aaff;
+    margin-bottom:10px;
 }
 
-/* Floating Objects */
+/* Footer */
+footer{
+    text-align:center;
+    padding:40px;
+    color:#888;
+    border-top:1px solid rgba(255,255,255,.08);
+}
 
-.floating{
-    position:absolute;
-    font-size:3rem;
-    opacity:.15;
-    animation:float 8s ease-in-out infinite;
+/* Glow particles */
+.particle{
+    position:fixed;
+    width:4px;
+    height:4px;
+    background:#ff8c00;
+    border-radius:50%;
+    animation:float 12s linear infinite;
+    opacity:.5;
 }
 
 @keyframes float{
-    0%,100%{
-        transform:translateY(0);
+    from{
+        transform:translateY(100vh);
     }
-    50%{
-        transform:translateY(-25px);
+    to{
+        transform:translateY(-100vh);
     }
 }
 
-footer{
-    text-align:center;
-    padding:60px 20px;
-    color:#94a3b8;
+@media(max-width:768px){
+    .hero h1{
+        font-size:3rem;
+    }
+
+    .hero h2{
+        font-size:1.3rem;
+    }
+
+    nav{
+        flex-direction:column;
+        gap:20px;
+    }
+
+    nav ul{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
 }
 </style>
 </head>
-
 <body>
 
-<div class="stars"></div>
+<nav>
+    <div class="logo">k⨆Rsh</div>
 
-<div class="glow glow1"></div>
-<div class="glow glow2"></div>
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">CS2 News</a></li>
+        <li><a href="#">Highlights</a></li>
+        <li><a href="#">Esports</a></li>
+        <li><a href="#">Skins</a></li>
+    </ul>
+</nav>
 
-<div class="planet planet1"></div>
-<div class="planet planet2"></div>
+<section class="hero">
+    <h1>k⨆Rsh</h1>
+    <h2>Counter-Strike 2 & CS:GO</h2>
 
-<div class="comet"></div>
-<div class="comet"></div>
+    <p>
+        The ultimate destination for CS2 and CS:GO players.
+        Get the latest news, esports updates, epic highlights,
+        headshots, tournaments, skins and gameplay content in one place.
+    </p>
 
-<header>
-    <div class="hero reveal">
-        <div class="badge">
-            🚀 نسل جدید VPN فضایی
-        </div>
-
-        <h1>
-            سفر به اینترنت با
-            <span class="gradient">CosmicVPN</span>
-        </h1>
-
-        <p>
-            سریع، امن و بدون محدودیت.
-            با فناوری نسل جدید CosmicVPN
-            به هر نقطه‌ای از اینترنت متصل شوید
-            و تجربه‌ای فراتر از سرعت نور داشته باشید.
-        </p>
-
-        <div class="buttons">
-            <button class="btn primary">
-                شروع سفر فضایی
-            </button>
-
-            <button class="btn secondary">
-                مشاهده امکانات
-            </button>
-        </div>
+    <div class="btns">
+        <button class="btn primary">Latest News</button>
+        <button class="btn secondary">Watch Highlights</button>
     </div>
-</header>
-
-<section>
-
-    <div class="floating" style="top:120%;right:10%">🪐</div>
-    <div class="floating" style="top:160%;left:10%">☄️</div>
-
-    <h2 class="section-title reveal">
-        چرا CosmicVPN؟
-    </h2>
-
-    <div class="cards">
-
-        <div class="card reveal">
-            <div class="icon">⚡</div>
-            <h3>سرعت فوق‌العاده</h3>
-            <p>
-                اتصال پرسرعت با سرورهای نسل جدید در سراسر جهان.
-            </p>
-        </div>
-
-        <div class="card reveal">
-            <div class="icon">🔒</div>
-            <h3>امنیت پیشرفته</h3>
-            <p>
-                رمزنگاری قدرتمند برای حفظ حریم خصوصی شما.
-            </p>
-        </div>
-
-        <div class="card reveal">
-            <div class="icon">🌍</div>
-            <h3>دسترسی جهانی</h3>
-            <p>
-                اتصال به ده‌ها کشور تنها با یک کلیک.
-            </p>
-        </div>
-
-    </div>
-
 </section>
 
-<section>
+<section class="section">
+    <h2 class="section-title">🔥 Main Categories</h2>
 
-    <div class="floating" style="top:230%;right:15%">🌌</div>
-
-    <h2 class="section-title reveal">
-        امکانات کهکشانی
-    </h2>
-
-    <div class="cards">
-
-        <div class="card reveal">
-            <div class="icon">🚀</div>
-            <h3>اتصال فوری</h3>
+    <div class="grid">
+        <div class="card">
+            <h3>🎯 CS2 News</h3>
             <p>
-                تنها چند ثانیه تا اتصال امن فاصله دارید.
+                Latest updates, patch notes, map changes,
+                weapon balancing and Valve announcements.
             </p>
         </div>
 
-        <div class="card reveal">
-            <div class="icon">🛰️</div>
-            <h3>سرورهای هوشمند</h3>
+        <div class="card">
+            <h3>💥 Highlights</h3>
             <p>
-                انتخاب خودکار سریع‌ترین مسیر ارتباطی.
+                Amazing AWP shots, aces, clutch plays,
+                headshots and unforgettable moments.
             </p>
         </div>
 
-        <div class="card reveal">
-            <div class="icon">💎</div>
-            <h3>پایداری بالا</h3>
+        <div class="card">
+            <h3>🏆 Esports</h3>
             <p>
-                اتصال پایدار حتی در شرایط شبکه دشوار.
+                Major tournaments, rankings,
+                professional teams and player statistics.
             </p>
         </div>
 
+        <div class="card">
+            <h3>💎 Skins Market</h3>
+            <p>
+                Trending skins, market values,
+                investments and rare collectibles.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="section-title">📰 Latest News</h2>
+
+    <div class="news-item">
+        <h4>Source 2 Engine</h4>
+        <p>
+            CS2 introduces major visual improvements,
+            responsive smoke physics and enhanced performance.
+        </p>
     </div>
 
+    <div class="news-item">
+        <h4>Sub-Tick System</h4>
+        <p>
+            A new networking system improves hit registration
+            and gameplay responsiveness.
+        </p>
+    </div>
+
+    <div class="news-item">
+        <h4>Competitive Scene</h4>
+        <p>
+            Professional teams continue adapting to new maps,
+            meta changes and tournament formats.
+        </p>
+    </div>
 </section>
 
 <footer>
-    © 2026 CosmicVPN — Beyond The Stars
+    © 2026 k⨆Rsh • CS2 & CS:GO Community
 </footer>
 
 <script>
-
-const reveals = document.querySelectorAll('.reveal');
-
-function revealElements(){
-    reveals.forEach(el => {
-        const top = el.getBoundingClientRect().top;
-        const visible = window.innerHeight - 100;
-
-        if(top < visible){
-            el.classList.add('active');
-        }
-    });
+for(let i=0;i<40;i++){
+    let p=document.createElement("div");
+    p.className="particle";
+    p.style.left=Math.random()*100+"vw";
+    p.style.animationDuration=(8+Math.random()*15)+"s";
+    p.style.opacity=Math.random();
+    document.body.appendChild(p);
 }
-
-window.addEventListener('scroll', revealElements);
-revealElements();
-
 </script>
 
 </body>
