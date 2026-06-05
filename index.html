@@ -408,3 +408,212 @@ for(let i=0;i<40;i++){
         </p>
     </div>
 </section>
+<!-- Top Players -->
+<section class="section">
+    <h2 class="section-title">⭐ Top CS2 Players</h2>
+
+    <div class="grid">
+        <div class="card">
+            <h3>s1mple</h3>
+            <p>
+                Legendary AWPer known for incredible aim,
+                clutch plays and world-class consistency.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>ZywOo</h3>
+            <p>
+                One of the most dominant players in CS history
+                with elite rifle and AWP skills.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>donk</h3>
+            <p>
+                Rising superstar famous for aggressive entries,
+                lightning-fast reactions and high impact rounds.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>m0NESY</h3>
+            <p>
+                Young prodigy with exceptional mechanical skill
+                and incredible flick shots.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Tournament Section -->
+<section class="section">
+    <h2 class="section-title">🏆 Upcoming Tournaments</h2>
+
+    <div class="grid">
+
+        <div class="card">
+            <h3>IEM Cologne</h3>
+            <p>
+                One of the biggest Counter-Strike events of the year
+                featuring the world's best teams.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>BLAST Premier</h3>
+            <p>
+                Elite international tournament with massive prize pools
+                and top-tier production.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>ESL Pro League</h3>
+            <p>
+                Long-format competition where teams battle
+                for global rankings and prestige.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Skin Showcase -->
+<section class="section">
+    <h2 class="section-title">💎 Popular Skins</h2>
+
+    <div class="grid">
+
+        <div class="card">
+            <h3>AK-47 | Fire Serpent</h3>
+            <p>
+                One of the most iconic AK skins with extremely high value.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>AWP | Dragon Lore</h3>
+            <p>
+                The most legendary sniper skin ever released in Counter-Strike.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>Karambit | Doppler</h3>
+            <p>
+                Premium knife skin featuring beautiful phase patterns.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>M4A4 | Howl</h3>
+            <p>
+                Contraband rarity skin known for its unique history.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Statistics -->
+<section class="section">
+    <h2 class="section-title">📊 Community Statistics</h2>
+
+    <div class="grid">
+
+        <div class="card">
+            <h3>35M+</h3>
+            <p>Registered Counter-Strike Players</p>
+        </div>
+
+        <div class="card">
+            <h3>1.8M+</h3>
+            <p>Average Daily Active Players</p>
+        </div>
+
+        <div class="card">
+            <h3>100K+</h3>
+            <p>Skins Traded Every Day</p>
+        </div>
+
+        <div class="card">
+            <h3>500+</h3>
+            <p>Professional Teams Worldwide</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Contact -->
+<section class="section">
+    <h2 class="section-title">📬 Join The Community</h2>
+
+    <div class="card" style="max-width:700px;margin:auto;text-align:center;">
+        <h3>Stay Updated</h3>
+        <p style="margin:20px 0;">
+            Subscribe to receive CS2 news, esports updates,
+            patch notes and exclusive content.
+        </p>
+
+        <input
+            type="email"
+            placeholder="Your Email"
+            style="
+                width:100%;
+                padding:15px;
+                border:none;
+                border-radius:8px;
+                margin-bottom:15px;
+                background:#111;
+                color:white;
+            "
+        >
+
+        <button class="btn primary">
+            Subscribe
+        </button>
+    </div>
+</section>
+input:focus{
+    outline:none;
+    box-shadow:0 0 15px #00aaff;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+.card{
+    backdrop-filter:blur(12px);
+}
+
+.news-item:hover{
+    transform:translateX(10px);
+    transition:.3s;
+    border-left-color:#ff8c00;
+}
+<script>
+
+document.querySelector(".primary")
+.addEventListener("click",()=>{
+
+    document.querySelectorAll(".section")[1]
+    .scrollIntoView({
+        behavior:"smooth"
+    });
+
+});
+
+document.querySelector(".secondary")
+.addEventListener("click",()=>{
+
+    window.scrollTo({
+        top:document.body.scrollHeight/2,
+        behavior:"smooth"
+    });
+
+});
+
+</script>
