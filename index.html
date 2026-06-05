@@ -617,3 +617,165 @@ document.querySelector(".secondary")
 });
 
 </script>
+<nav>
+    <div class="logo">k⨆Rsh</div>
+
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#news">CS2 News</a></li>
+        <li><a href="#highlights">Highlights</a></li>
+        <li><a href="#esports">Esports</a></li>
+        <li><a href="#skins">Skins</a></li>
+    </ul>
+</nav>
+<section class="hero" id="home">
+    <section class="section" id="news">
+        <section class="section" id="highlights">
+            <section class="section" id="esports">
+                <section class="section" id="skins">
+                    html{
+    scroll-behavior:smooth;
+}
+                    <script>
+document.querySelectorAll("nav a").forEach(link => {
+    link.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        const targetId = this.getAttribute("href");
+        const target = document.querySelector(targetId);
+
+        if (target) {
+            target.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+    });
+});
+</script>
+<section class="section" id="skins">
+    <h2 class="section-title">💎 CS2 Skins Collection</h2>
+
+    <!-- Search -->
+    <div style="text-align:center;margin-bottom:30px;">
+        <input id="skinSearch" type="text" placeholder="Search skins..."
+            style="
+                padding:15px;
+                width:60%;
+                max-width:500px;
+                border:none;
+                border-radius:10px;
+                background:#111;
+                color:white;
+            ">
+    </div>
+
+    <!-- Filters -->
+    <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:30px;">
+        <button class="filter-btn" data-type="all">All</button>
+        <button class="filter-btn" data-type="ak">AK-47</button>
+        <button class="filter-btn" data-type="awp">AWP</button>
+        <button class="filter-btn" data-type="knife">Knives</button>
+        <button class="filter-btn" data-type="m4">M4</button>
+    </div>
+
+    <!-- Skins Grid -->
+    <div class="skins-grid">
+
+        <div class="skin-card" data-type="ak">
+            <h3>AK-47 | Fire Serpent</h3>
+            <p>Legendary rare AK skin</p>
+        </div>
+
+        <div class="skin-card" data-type="awp">
+            <h3>AWP | Dragon Lore</h3>
+            <p>Most iconic sniper skin</p>
+        </div>
+
+        <div class="skin-card" data-type="knife">
+            <h3>Karambit | Doppler</h3>
+            <p>Premium knife animation skin</p>
+        </div>
+
+        <div class="skin-card" data-type="m4">
+            <h3>M4A4 | Howl</h3>
+            <p>Rare contraband skin</p>
+        </div>
+
+        <div class="skin-card" data-type="ak">
+            <h3>AK-47 | Asiimov</h3>
+            <p>Futuristic white/orange design</p>
+        </div>
+
+        <div class="skin-card" data-type="awp">
+            <h3>AWP | Asiimov</h3>
+            <p>Clean sci-fi sniper skin</p>
+        </div>
+
+    </div>
+</section>
+.skins-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.skin-card{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    padding:20px;
+    border-radius:15px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.skin-card:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 20px rgba(0,170,255,.3);
+}
+
+.filter-btn{
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#111;
+    color:white;
+    transition:.3s;
+}
+
+.filter-btn:hover{
+    background:#00aaff;
+    color:black;
+}
+                    <script>
+const cards = document.querySelectorAll(".skin-card");
+const buttons = document.querySelectorAll(".filter-btn");
+const search = document.getElementById("skinSearch");
+
+// FILTER SYSTEM
+buttons.forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+        const type = btn.dataset.type;
+
+        cards.forEach(card=>{
+            if(type === "all"){
+                card.style.display = "block";
+            } else {
+                card.style.display =
+                    card.dataset.type === type ? "block" : "none";
+            }
+        });
+    });
+});
+
+// SEARCH SYSTEM
+search.addEventListener("input", ()=>{
+    const value = search.value.toLowerCase();
+
+    cards.forEach(card=>{
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(value) ? "block" : "none";
+    });
+});
+</script>
