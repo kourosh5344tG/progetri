@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>k⨆Rsh - CS2 Hub</title>
+<title>k⨆Rsh PRO MAX</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
 <style>
 body{
@@ -11,982 +14,425 @@ body{
     font-family:sans-serif;
     background:#050505;
     color:white;
-    overflow-x:hidden;
-}
-
-/* LOADER */
-#intro-loader{
-    position:fixed;
-    inset:0;
-    background:black;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:99999;
-}
-
-.loader-box{
-    text-align:center;
-}
-
-.loader-bar{
-    width:300px;
-    height:10px;
-    background:#111;
-    margin:20px auto;
-    border-radius:20px;
     overflow:hidden;
+    cursor:none;
 }
 
-#progress{
-    width:0%;
-    height:100%;
-    background:linear-gradient(90deg,#ff8c00,#00aaff);
-}
-
-/* BUTTON */
-.btn{
-    padding:12px 25px;
-    border:none;
-    cursor:pointer;
-    border-radius:8px;
-}
-
-.primary{background:#ff8c00;color:black;}
-
-/* SECTIONS */
-.section{
-    padding:80px 10%;
-}
-
-.card{
-    background:#111;
-    padding:20px;
-    border-radius:12px;
-    margin:10px;
-}
-
-/* MARKET */
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-}
-
-.skin-card{
-    background:#111827;
-    padding:15px;
-    border-radius:12px;
-}
-
-/* PLAYERS */
-.player-list .card{
-    display:inline-block;
-    margin:10px;
-}
-
-/* PARTICLES */
-.particle{
-    position:fixed;
-    width:5px;
-    height:5px;
-    background:#ff8c00;
-    border-radius:50%;
-    animation:float 10s linear infinite;
-}
-
-@keyframes float{
-    from{transform:translateY(100vh);}
-    to{transform:translateY(-100vh);}
-}
-</style>
-</head>
-
-<body>
-
-<!-- LOADER -->
-<div id="intro-loader">
-    <div class="loader-box">
-        <h1>k⨆Rsh</h1>
-
-        <div class="loader-bar">
-            <div id="progress"></div>
-        </div>
-
-        <p id="percent">0%</p>
-
-        <button id="enterBtn" class="btn primary" style="display:none;">
-            ENTER
-        </button>
-
-        <audio id="sound">
-            <source src="startup.mp3">
-        </audio>
-    </div>
-</div>
-
-<!-- MAIN -->
-<div id="main" style="display:none;">
-
-<!-- MARKET -->
-<section class="section">
-    <h2>🛒 Market</h2>
-
-    <div class="grid">
-        <div class="skin-card">AWP | Dragon Lore</div>
-        <div class="skin-card">AK-47 | Fire Serpent</div>
-        <div class="skin-card">Karambit | Doppler</div>
-    </div>
-</section>
-
-<!-- PLAYERS -->
-<section class="section">
-    <h2>👥 Players</h2>
-
-    <input id="name" placeholder="Enter name">
-    <button class="btn primary" onclick="addPlayer()">Add</button>
-
-    <div id="players" class="player-list"></div>
-</section>
-
-</div>
-
-<script>
-
-/* PARTICLES */
-for(let i=0;i<30;i++){
-    let p=document.createElement("div");
-    p.className="particle";
-    p.style.left=Math.random()*100+"vw";
-    p.style.animationDuration=(5+Math.random()*10)+"s";
-    document.body.appendChild(p);
-}
-
-/* LOADING */
-let i=0;
-let bar=document.getElementById("progress");
-let percent=document.getElementById("percent");
-let btn=document.getElementById("enterBtn");
-
-let load=setInterval(()=>{
-    i++;
-    bar.style.width=i+"%";
-    percent.innerText=i+"%";
-
-    if(i>=100){
-        clearInterval(load);
-        btn.style.display="block";
-    }
-},30);
-
-btn.onclick=()=>{
-    document.getElementById("sound").play();
-    document.getElementById("intro-loader").style.display="none";
-    document.getElementById("main").style.display="block";
-};
-
-/* PLAYERS SYSTEM */
-let players=JSON.parse(localStorage.getItem("players"))||[];
-
-function render(){
-    document.getElementById("players").innerHTML=
-    players.map(p=>`<div class="card">🎮 ${p}</div>`).join("");
-}
-
-function addPlayer(){
-    let name=document.getElementById("name").value;
-    if(!name) return;
-
-    players.push(name);
-    localStorage.setItem("players",JSON.stringify(players));
-    render();
-}
-
-render();
-
-</script>
-
-</body>
-</html>
-                    
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>k⨆Rsh - CS2 & CS:GO Hub</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
-}
-
-body{
-    background:#050505;
-    color:white;
-    overflow-x:hidden;
-}
-
-/* Background Effects */
+/* background */
 body::before{
     content:"";
     position:fixed;
     inset:0;
     background:
-        radial-gradient(circle at 20% 20%, rgba(255,140,0,.15), transparent 30%),
-        radial-gradient(circle at 80% 30%, rgba(0,174,255,.15), transparent 30%),
-        radial-gradient(circle at 50% 80%, rgba(255,255,255,.04), transparent 40%);
-    z-index:-2;
-}
-
-body::after{
-    content:"";
-    position:fixed;
-    inset:0;
-    background:url("https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1920&q=80") center/cover;
-    opacity:.08;
+    radial-gradient(circle at 20% 20%, #ff8c0020, transparent 40%),
+    radial-gradient(circle at 80% 30%, #00aaff20, transparent 40%);
     z-index:-1;
 }
 
-/* Navbar */
-nav{
-    width:100%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:25px 10%;
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid rgba(255,255,255,.08);
-}
-
-.logo{
-    font-size:2rem;
-    font-weight:900;
-    color:#ff8c00;
-    text-shadow:0 0 20px #ff8c00;
-}
-
-nav ul{
-    display:flex;
-    list-style:none;
-    gap:30px;
-}
-
-nav a{
-    color:white;
-    text-decoration:none;
-    transition:.3s;
-}
-
-nav a:hover{
-    color:#00aaff;
-}
-
-/* Hero */
-.hero{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:40px;
-}
-
-.hero h1{
-    font-size:6rem;
-    font-weight:900;
-    letter-spacing:4px;
-    color:#fff;
-    text-shadow:
-        0 0 10px #fff,
-        0 0 20px #ff8c00,
-        0 0 40px #ff8c00;
-}
-
-.hero h2{
-    margin-top:15px;
-    font-size:2rem;
-    color:#00aaff;
-}
-
-.hero p{
-    margin-top:20px;
-    max-width:800px;
-    color:#bdbdbd;
-    line-height:1.7;
-}
-
-.btns{
-    margin-top:35px;
-    display:flex;
-    gap:20px;
-}
-
-.btn{
-    padding:15px 35px;
-    border:none;
-    cursor:pointer;
-    font-weight:bold;
-    border-radius:8px;
-    transition:.3s;
-}
-
-.primary{
+/* cursor */
+#cursor{
+    width:10px;
+    height:10px;
     background:#ff8c00;
-    color:black;
-}
-
-.primary:hover{
-    transform:translateY(-4px);
-    box-shadow:0 0 25px #ff8c00;
-}
-
-.secondary{
-    background:transparent;
-    color:white;
-    border:2px solid #00aaff;
-}
-
-.secondary:hover{
-    background:#00aaff;
-    color:black;
-}
-
-/* Cards */
-.section{
-    padding:100px 10%;
-}
-
-.section-title{
-    text-align:center;
-    font-size:3rem;
-    margin-bottom:50px;
-    color:#fff;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:25px;
-}
-
-.card{
-    background:rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:15px;
-    padding:30px;
-    transition:.3s;
-}
-
-.card:hover{
-    transform:translateY(-8px);
-    box-shadow:0 0 25px rgba(255,140,0,.3);
-}
-
-.card h3{
-    margin-bottom:15px;
-    color:#ff8c00;
-}
-
-.card p{
-    color:#cfcfcf;
-    line-height:1.6;
-}
-
-/* News */
-.news-item{
-    margin-bottom:25px;
-    padding:25px;
-    border-left:4px solid #00aaff;
-    background:rgba(255,255,255,.03);
-}
-
-.news-item h4{
-    color:#00aaff;
-    margin-bottom:10px;
-}
-
-/* Footer */
-footer{
-    text-align:center;
-    padding:40px;
-    color:#888;
-    border-top:1px solid rgba(255,255,255,.08);
-}
-
-/* Glow particles */
-.particle{
     position:fixed;
-    width:4px;
-    height:4px;
-    background:#ff8c00;
     border-radius:50%;
-    animation:float 12s linear infinite;
-    opacity:.5;
+    pointer-events:none;
+    box-shadow:0 0 15px #ff8c00;
+    z-index:99999;
 }
 
-@keyframes float{
-    from{
-        transform:translateY(100vh);
-    }
-    to{
-        transform:translateY(-100vh);
-    }
+/* card */
+.card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
+    backdrop-filter:blur(10px);
+    border-radius:12px;
+    padding:20px;
+    margin:20px;
+    max-width:700px;
 }
 
-@media(max-width:768px){
-    .hero h1{
-        font-size:3rem;
-    }
+/* buttons */
+button{
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
 
-    .hero h2{
-        font-size:1.3rem;
-    }
+/* game */
+#game{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.95);
+    z-index:9999;
+    text-align:center;
+}
 
-    nav{
-        flex-direction:column;
-        gap:20px;
-    }
+.target{
+    width:60px;
+    height:60px;
+    background:red;
+    border-radius:50%;
+    position:absolute;
+    box-shadow:0 0 20px red;
+}
 
-    nav ul{
-        flex-wrap:wrap;
-        justify-content:center;
-    }
+/* chat */
+#chatBox{
+    display:none;
+    position:fixed;
+    bottom:170px;
+    right:20px;
+    width:300px;
+    height:380px;
+    background:#111;
+    border:1px solid #333;
+    border-radius:10px;
+    padding:10px;
+    z-index:99999;
+}
+
+#messages{
+    height:270px;
+    overflow:auto;
+    font-size:13px;
 }
 </style>
 </head>
+
 <body>
 
-<nav>
-    <div class="logo">k⨆Rsh</div>
+<div id="cursor"></div>
 
-    <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">CS2 News</a></li>
-        <li><a href="#">Highlights</a></li>
-        <li><a href="#">Esports</a></li>
-        <li><a href="#">Skins</a></li>
-    </ul>
-</nav>
+<!-- buttons -->
+<button onclick="startGame()" style="position:fixed;bottom:70px;right:20px;background:#00aaff;">🎮</button>
+<button onclick="toggleChat()" style="position:fixed;bottom:120px;right:20px;background:#00ff88;">💬</button>
 
-<section class="hero">
-    <h1>k⨆Rsh</h1>
-    <h2>Counter-Strike 2 & CS:GO</h2>
+<h1 style="text-align:center;margin-top:60px;">k⨆Rsh PRO MAX</h1>
 
-    <p>
-        The ultimate destination for CS2 and CS:GO players.
-        Get the latest news, esports updates, epic highlights,
-        headshots, tournaments, skins and gameplay content in one place.
-    </p>
+<div class="card">
+<h2>🔥 Gaming Hub</h2>
+<p>CS2 • Esports • Skins • Community</p>
+</div>
 
-    <div class="btns">
-        <button class="btn primary">Latest News</button>
-        <button class="btn secondary">Watch Highlights</button>
-    </div>
-</section>
+<!-- GAME -->
+<div id="game">
+<h1>🎯 Game</h1>
+<h2>Score: <span id="score">0</span></h2>
+<div class="target" id="target" onclick="hit()"></div>
+<br>
+<button onclick="exitGame()">Exit</button>
+</div>
 
-<section class="section">
-    <h2 class="section-title">🔥 Main Categories</h2>
-
-    <div class="grid">
-        <div class="card">
-            <h3>🎯 CS2 News</h3>
-            <p>
-                Latest updates, patch notes, map changes,
-                weapon balancing and Valve announcements.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>💥 Highlights</h3>
-            <p>
-                Amazing AWP shots, aces, clutch plays,
-                headshots and unforgettable moments.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>🏆 Esports</h3>
-            <p>
-                Major tournaments, rankings,
-                professional teams and player statistics.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>💎 Skins Market</h3>
-            <p>
-                Trending skins, market values,
-                investments and rare collectibles.
-            </p>
-        </div>
-    </div>
-</section>
-
-<section class="section">
-    <h2 class="section-title">📰 Latest News</h2>
-
-    <div class="news-item">
-        <h4>Source 2 Engine</h4>
-        <p>
-            CS2 introduces major visual improvements,
-            responsive smoke physics and enhanced performance.
-        </p>
-    </div>
-
-    <div class="news-item">
-        <h4>Sub-Tick System</h4>
-        <p>
-            A new networking system improves hit registration
-            and gameplay responsiveness.
-        </p>
-    </div>
-
-    <div class="news-item">
-        <h4>Competitive Scene</h4>
-        <p>
-            Professional teams continue adapting to new maps,
-            meta changes and tournament formats.
-        </p>
-    </div>
-</section>
-
-<footer>
-    © 2026 k⨆Rsh • CS2 & CS:GO Community
-</footer>
+<!-- CHAT -->
+<div id="chatBox">
+<div id="messages"></div>
+<input id="msg" placeholder="message..." style="width:100%;padding:6px;">
+<button onclick="sendMsg()" style="width:100%;margin-top:5px;">Send</button>
+</div>
 
 <script>
-for(let i=0;i<40;i++){
-    let p=document.createElement("div");
-    p.className="particle";
-    p.style.left=Math.random()*100+"vw";
-    p.style.animationDuration=(8+Math.random()*15)+"s";
-    p.style.opacity=Math.random();
-    document.body.appendChild(p);
+
+/* cursor */
+document.addEventListener("mousemove",(e)=>{
+    let c=document.getElementById("cursor");
+    c.style.left=e.clientX+"px";
+    c.style.top=e.clientY+"px";
+});
+
+/* game */
+let score=0;
+
+function startGame(){
+    document.getElementById("game").style.display="block";
+    score=0;
+    document.getElementById("score").innerText=score;
+    moveTarget();
 }
+
+function exitGame(){
+    document.getElementById("game").style.display="none";
+}
+
+function hit(){
+    score++;
+    document.getElementById("score").innerText=score;
+    moveTarget();
+}
+
+function moveTarget(){
+    let t=document.getElementById("target");
+    t.style.left=Math.random()*80+"vw";
+    t.style.top=Math.random()*80+"vh";
+}
+
+/* FIREBASE (IMPORTANT FIX) */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com/",
+  projectId: "YOUR_PROJECT"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const chatRef = db.ref("chat");
+
+/* chat */
+function toggleChat(){
+    let box=document.getElementById("chatBox");
+    box.style.display = box.style.display==="block"?"none":"block";
+}
+
+function sendMsg(){
+    let msg=document.getElementById("msg").value;
+    if(!msg) return;
+
+    chatRef.push({
+        text: msg,
+        time: Date.now()
+    });
+
+    document.getElementById("msg").value="";
+}
+
+/* FIX: جلوگیری از تکرار پیام‌ها */
+chatRef.on("child_added",(data)=>{
+    let m=data.val();
+
+    let div=document.createElement("div");
+    div.innerText="🧑 "+m.text;
+
+    document.getElementById("messages").appendChild(div);
+
+    let box=document.getElementById("messages");
+    box.scrollTop = box.scrollHeight;
+});
+
 </script>
 
 </body>
 </html>
-<section class="section">
-    <h2 class="section-title">📰 Latest CS2 News</h2>
+<!-- 💬 CHAT -->
+<div id="chatBox">
+<div id="messages"></div>
 
-    <div class="news-item">
-        <h4>🔥 Cologne Major 2026 Sticker Market Explosion</h4>
-        <p>
-            پس از تغییرات جدید Valve در Major Shop، قیمت برخی استیکرهای
-            Cologne 2026 به شکل عجیبی افزایش یافت و خرید مجموعه کامل
-            استیکرهای برتر به نزدیک 20 هزار دلار رسیده است.
-        </p>
-    </div>
+<input id="name" placeholder="username..." style="width:100%;padding:6px;">
+<input id="msg" placeholder="message..." style="width:100%;padding:6px;margin-top:5px;">
 
-    <div class="news-item">
-        <h4>🗺️ Return of Cache</h4>
-        <p>
-            مپ افسانه‌ای Cache دوباره به CS2 بازگشته است.
-            این نسخه با موتور Source 2 بازسازی شده و نورپردازی،
-            بافت‌ها و جزئیات گرافیکی آن کاملاً به‌روزرسانی شده‌اند.
-        </p>
-    </div>
+<button onclick="sendMsg()" style="width:100%;margin-top:5px;">Send</button>
+<button onclick="adminLogin()" style="width:100%;margin-top:5px;background:#ff8c00;">Admin</button>
+</div>
+let isAdmin = false;
 
-    <div class="news-item">
-        <h4>⚡ Animation System Upgrade</h4>
-        <p>
-            Valve نسخه بتای Animgraph 2 را منتشر کرده که مصرف CPU
-            و هزینه‌های شبکه مربوط به انیمیشن‌ها را کاهش می‌دهد
-            و عملکرد بازی را بهبود می‌بخشد.
-        </p>
-    </div>
+/* send message */
+function sendMsg(){
+    let name = document.getElementById("name").value || "Guest";
+    let msg = document.getElementById("msg").value;
 
-    <div class="news-item">
-        <h4>🎯 New Reload System</h4>
-        <p>
-            یکی از بزرگ‌ترین تغییرات تاریخ Counter-Strike:
-            اکنون هنگام Reload کردن، گلوله‌های باقی‌مانده در خشاب
-            از بین می‌روند و بازیکنان باید مدیریت مهمات را جدی‌تر بگیرند.
-        </p>
-    </div>
+    if(!msg) return;
 
-    <div class="news-item">
-        <h4>🏆 IEM Cologne Major 2026</h4>
-        <p>
-            مسابقات Major جدید از 2 تا 21 ژوئن 2026 در شهر کلن آلمان
-            برگزار می‌شود و 32 تیم برتر جهان برای قهرمانی رقابت می‌کنند.
-        </p>
-    </div>
-</section>
-<!-- Top Players -->
-<section class="section">
-    <h2 class="section-title">⭐ Top CS2 Players</h2>
+    chatRef.push({
+        name:name,
+        text:msg,
+        admin:isAdmin,
+        time:Date.now()
+    });
 
-    <div class="grid">
-        <div class="card">
-            <h3>s1mple</h3>
-            <p>
-                Legendary AWPer known for incredible aim,
-                clutch plays and world-class consistency.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>ZywOo</h3>
-            <p>
-                One of the most dominant players in CS history
-                with elite rifle and AWP skills.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>donk</h3>
-            <p>
-                Rising superstar famous for aggressive entries,
-                lightning-fast reactions and high impact rounds.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>m0NESY</h3>
-            <p>
-                Young prodigy with exceptional mechanical skill
-                and incredible flick shots.
-            </p>
-        </div>
-    </div>
-</section>
-
-<!-- Tournament Section -->
-<section class="section">
-    <h2 class="section-title">🏆 Upcoming Tournaments</h2>
-
-    <div class="grid">
-
-        <div class="card">
-            <h3>IEM Cologne</h3>
-            <p>
-                One of the biggest Counter-Strike events of the year
-                featuring the world's best teams.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>BLAST Premier</h3>
-            <p>
-                Elite international tournament with massive prize pools
-                and top-tier production.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>ESL Pro League</h3>
-            <p>
-                Long-format competition where teams battle
-                for global rankings and prestige.
-            </p>
-        </div>
-
-    </div>
-</section>
-
-<!-- Skin Showcase -->
-<section class="section">
-    <h2 class="section-title">💎 Popular Skins</h2>
-
-    <div class="grid">
-
-        <div class="card">
-            <h3>AK-47 | Fire Serpent</h3>
-            <p>
-                One of the most iconic AK skins with extremely high value.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>AWP | Dragon Lore</h3>
-            <p>
-                The most legendary sniper skin ever released in Counter-Strike.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>Karambit | Doppler</h3>
-            <p>
-                Premium knife skin featuring beautiful phase patterns.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>M4A4 | Howl</h3>
-            <p>
-                Contraband rarity skin known for its unique history.
-            </p>
-        </div>
-
-    </div>
-</section>
-
-<!-- Statistics -->
-<section class="section">
-    <h2 class="section-title">📊 Community Statistics</h2>
-
-    <div class="grid">
-
-        <div class="card">
-            <h3>35M+</h3>
-            <p>Registered Counter-Strike Players</p>
-        </div>
-
-        <div class="card">
-            <h3>1.8M+</h3>
-            <p>Average Daily Active Players</p>
-        </div>
-
-        <div class="card">
-            <h3>100K+</h3>
-            <p>Skins Traded Every Day</p>
-        </div>
-
-        <div class="card">
-            <h3>500+</h3>
-            <p>Professional Teams Worldwide</p>
-        </div>
-
-    </div>
-</section>
-
-<!-- Contact -->
-<section class="section">
-    <h2 class="section-title">📬 Join The Community</h2>
-
-    <div class="card" style="max-width:700px;margin:auto;text-align:center;">
-        <h3>Stay Updated</h3>
-        <p style="margin:20px 0;">
-            Subscribe to receive CS2 news, esports updates,
-            patch notes and exclusive content.
-        </p>
-
-        <input
-            type="email"
-            placeholder="Your Email"
-            style="
-                width:100%;
-                padding:15px;
-                border:none;
-                border-radius:8px;
-                margin-bottom:15px;
-                background:#111;
-                color:white;
-            "
-        >
-
-        <button class="btn primary">
-            Subscribe
-        </button>
-    </div>
-</section>
-input:focus{
-    outline:none;
-    box-shadow:0 0 15px #00aaff;
+    document.getElementById("msg").value="";
 }
 
-html{
-    scroll-behavior:smooth;
+/* receive */
+chatRef.on("child_added",(data)=>{
+    let m=data.val();
+
+    let div=document.createElement("div");
+    div.style.margin="6px 0";
+
+    if(m.admin){
+        div.innerHTML = "👑 <b style='color:#ff8c00'>ADMIN</b>: "+m.text;
+    }else{
+        div.innerHTML = "🧑 "+m.name+": "+m.text;
+    }
+
+    document.getElementById("messages").appendChild(div);
+
+    let box=document.getElementById("messages");
+    box.scrollTop = box.scrollHeight;
+});
+
+/* admin login */
+function adminLogin(){
+    let pass = prompt("Enter admin password:");
+
+    if(pass === "123456"){
+        isAdmin = true;
+        alert("Admin mode ON 👑");
+    }else{
+        alert("Wrong password ❌");
+    }
+}
+<div id="chatBox">
+<div id="messages"></div>
+
+<input id="name" placeholder="username..." style="width:100%;padding:6px;">
+<input id="msg" placeholder="message..." style="width:100%;padding:6px;margin-top:5px;">
+
+<button onclick="sendMsg()" style="width:100%;margin-top:5px;">Send</button>
+<button onclick="adminLogin()" style="width:100%;margin-top:5px;background:#ff8c00;">Admin</button>
+</div>
+.msg{
+    padding:6px;
+    margin:5px 0;
+    border-radius:8px;
+    background:rgba(255,255,255,0.05);
 }
 
-.card{
-    backdrop-filter:blur(12px);
+.me{
+    color:#00aaff;
+}
+
+.admin{
+    color:#ff8c00;
+    font-weight:bold;
+}
+let isAdmin = false;
+
+/* username save */
+if(localStorage.getItem("name")){
+    document.getElementById("name").value = localStorage.getItem("name");
+}
+
+document.getElementById("name").addEventListener("change",(e)=>{
+    localStorage.setItem("name",e.target.value);
+});
+
+/* send message */
+function sendMsg(){
+    let name = document.getElementById("name").value || "Guest";
+    let msg = document.getElementById("msg").value;
+
+    if(!msg) return;
+
+    chatRef.push({
+        name:name,
+        text:msg,
+        admin:isAdmin,
+        time:Date.now()
+    });
+
+    document.getElementById("msg").value="";
+}
+
+/* receive */
+chatRef.on("child_added",(data)=>{
+    let m=data.val();
+
+    let div=document.createElement("div");
+    div.classList.add("msg");
+
+    if(m.admin){
+        div.innerHTML = "👑 ADMIN: "+m.text;
+        div.classList.add("admin");
+    }else{
+        div.innerHTML = "🧑 "+m.name+": "+m.text;
+    }
+
+    /* delete button for admin */
+    if(isAdmin){
+        let del=document.createElement("button");
+        del.innerText="🗑";
+        del.style.float="right";
+        del.style.background="red";
+        del.style.color="white";
+
+        del.onclick=()=>chatRef.child(data.key).remove();
+
+        div.appendChild(del);
+    }
+
+    document.getElementById("messages").appendChild(div);
+
+    let box=document.getElementById("messages");
+    box.scrollTop = box.scrollHeight;
+});
+
+/* admin login */
+function adminLogin(){
+    let pass = prompt("Admin password:");
+
+    if(pass === "123456789"){
+        isAdmin = true;
+        alert("👑 Admin Mode ON");
+    }else{
+        alert("Wrong password ❌");
+    }
+}
+<body>
+    <!-- 📰 CS2 NEWS SECTION -->
+<div class="card">
+  <h2>📰 CS2 Latest News</h2>
+
+  <div id="news"></div>
+</div>
+
+<style>
+.news-item{
+    background:rgba(255,255,255,0.05);
+    padding:10px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.1);
+    transition:0.3s;
 }
 
 .news-item:hover{
-    transform:translateX(10px);
-    transition:.3s;
-    border-left-color:#ff8c00;
+    transform:scale(1.02);
+    border-color:#00aaff;
 }
+.news-title{
+    color:#00aaff;
+    font-weight:bold;
+}
+.news-time{
+    font-size:11px;
+    opacity:0.6;
+}
+</style>
+
 <script>
+// 📰 CS2 NEWS DATA (قابل تغییر)
+const cs2News = [
+  {
+    title: "Cache returned to CS2 matchmaking",
+    text: "Classic map Cache is back in Competitive and Casual modes.",
+    time: "2026-04"
+  },
+  {
+    title: "CS2 Major updates & sticker system changed",
+    text: "Valve updated Major shop with new sticker favorites and pricing system.",
+    time: "2026-05"
+  },
+  {
+    title: "Gameplay changes in CS2 update",
+    text: "Reloading system, ammo mechanics and animations improved.",
+    time: "2026-03"
+  }
+];
 
-document.querySelector(".primary")
-.addEventListener("click",()=>{
+// 📌 render news
+let newsBox = document.getElementById("news");
 
-    document.querySelectorAll(".section")[1]
-    .scrollIntoView({
-        behavior:"smooth"
-    });
-
-});
-
-document.querySelector(".secondary")
-.addEventListener("click",()=>{
-
-    window.scrollTo({
-        top:document.body.scrollHeight/2,
-        behavior:"smooth"
-    });
-
-});
-
-</script>
-<nav>
-    <div class="logo">k⨆Rsh</div>
-
-    <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#news">CS2 News</a></li>
-        <li><a href="#highlights">Highlights</a></li>
-        <li><a href="#esports">Esports</a></li>
-        <li><a href="#skins">Skins</a></li>
-    </ul>
-</nav>
-<section class="hero" id="home">
-    <section class="section" id="news">
-        <section class="section" id="highlights">
-            <section class="section" id="esports">
-                <section class="section" id="skins">
-                    html{
-    scroll-behavior:smooth;
-}
-                    <script>
-document.querySelectorAll("nav a").forEach(link => {
-    link.addEventListener("click", function(e) {
-        e.preventDefault();
-
-        const targetId = this.getAttribute("href");
-        const target = document.querySelector(targetId);
-
-        if (target) {
-            target.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-        }
-    });
-});
-</script>
-<section class="section" id="skins">
-    <h2 class="section-title">💎 CS2 Skins Collection</h2>
-
-    <!-- Search -->
-    <div style="text-align:center;margin-bottom:30px;">
-        <input id="skinSearch" type="text" placeholder="Search skins..."
-            style="
-                padding:15px;
-                width:60%;
-                max-width:500px;
-                border:none;
-                border-radius:10px;
-                background:#111;
-                color:white;
-            ">
-    </div>
-
-    <!-- Filters -->
-    <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:30px;">
-        <button class="filter-btn" data-type="all">All</button>
-        <button class="filter-btn" data-type="ak">AK-47</button>
-        <button class="filter-btn" data-type="awp">AWP</button>
-        <button class="filter-btn" data-type="knife">Knives</button>
-        <button class="filter-btn" data-type="m4">M4</button>
-    </div>
-
-    <!-- Skins Grid -->
-    <div class="skins-grid">
-
-        <div class="skin-card" data-type="ak">
-            <h3>AK-47 | Fire Serpent</h3>
-            <p>Legendary rare AK skin</p>
-        </div>
-
-        <div class="skin-card" data-type="awp">
-            <h3>AWP | Dragon Lore</h3>
-            <p>Most iconic sniper skin</p>
-        </div>
-
-        <div class="skin-card" data-type="knife">
-            <h3>Karambit | Doppler</h3>
-            <p>Premium knife animation skin</p>
-        </div>
-
-        <div class="skin-card" data-type="m4">
-            <h3>M4A4 | Howl</h3>
-            <p>Rare contraband skin</p>
-        </div>
-
-        <div class="skin-card" data-type="ak">
-            <h3>AK-47 | Asiimov</h3>
-            <p>Futuristic white/orange design</p>
-        </div>
-
-        <div class="skin-card" data-type="awp">
-            <h3>AWP | Asiimov</h3>
-            <p>Clean sci-fi sniper skin</p>
-        </div>
-
-    </div>
-</section>
-.skins-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
-}
-
-.skin-card{
-    background:rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.08);
-    padding:20px;
-    border-radius:15px;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.skin-card:hover{
-    transform:scale(1.05);
-    box-shadow:0 0 20px rgba(0,170,255,.3);
-}
-
-.filter-btn{
-    padding:10px 20px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    background:#111;
-    color:white;
-    transition:.3s;
-}
-
-.filter-btn:hover{
-    background:#00aaff;
-    color:black;
-}
-                    <script>
-const cards = document.querySelectorAll(".skin-card");
-const buttons = document.querySelectorAll(".filter-btn");
-const search = document.getElementById("skinSearch");
-
-// FILTER SYSTEM
-buttons.forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-        const type = btn.dataset.type;
-
-        cards.forEach(card=>{
-            if(type === "all"){
-                card.style.display = "block";
-            } else {
-                card.style.display =
-                    card.dataset.type === type ? "block" : "none";
-            }
-        });
-    });
-});
-
-// SEARCH SYSTEM
-search.addEventListener("input", ()=>{
-    const value = search.value.toLowerCase();
-
-    cards.forEach(card=>{
-        const text = card.innerText.toLowerCase();
-        card.style.display = text.includes(value) ? "block" : "none";
-    });
+cs2News.forEach(n=>{
+    let div = document.createElement("div");
+    div.className = "news-item";
+    div.innerHTML = `
+        <div class="news-title">🔥 ${n.title}</div>
+        <div>${n.text}</div>
+        <div class="news-time">⏱ ${n.time}</div>
+    `;
+    newsBox.appendChild(div);
 });
 </script>
