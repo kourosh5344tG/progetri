@@ -2,197 +2,64 @@
 <html lang="fa">
 <head>
 <meta charset="UTF-8">
-<title>K⨆Rsh</title>
-
+<title>K⨆Rsh Chat</title>
 <style>
-body{
-  margin:0;
-  display:flex;
-  height:100vh;
-  font-family:Arial;
-  background:#1e1f22;
-  color:white;
-}
-
-/* SIDEBAR */
-.sidebar{
-  width:240px;
-  background:#111214;
-  padding:10px;
-}
-
-.logo{
-  font-size:22px;
-  color:#7c5cff;
-  padding:10px;
-  font-weight:bold;
-}
-
-.channel{
-  padding:10px;
-  margin:5px 0;
-  background:#2a2d36;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.channel:hover{
-  background:#3a3d46;
-}
-
-/* CHAT */
-.chat{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-}
-
-.header{
-  padding:10px;
-  background:#18191c;
-  border-bottom:1px solid #2a2b30;
-}
-
-.messages{
-  flex:1;
-  overflow:auto;
-  padding:10px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.msg{
-  background:#2a2d36;
-  padding:8px;
-  border-radius:6px;
-  max-width:70%;
-  word-wrap:break-word;
-}
-
-.input{
-  display:flex;
-  padding:10px;
-  background:#18191c;
-}
-
-input{
-  flex:1;
-  padding:10px;
-  border:none;
-  outline:none;
-  border-radius:6px;
-  background:#2a2d36;
-  color:white;
-}
-
-button{
-  margin-left:10px;
-  padding:10px;
-  background:#7c5cff;
-  border:none;
-  color:white;
-  border-radius:6px;
-  cursor:pointer;
-}
+body{margin:0;font-family:Arial;display:flex;height:100vh;background:#1e1f22;color:white;}
+.sidebar{width:200px;background:#111;padding:10px;}
+.logo{color:#7c5cff;font-size:22px;font-weight:bold;padding:10px;}
+#users{margin-top:10px;font-size:14px;}
+.chat{flex:1;display:flex;flex-direction:column;}
+.header{padding:10px;background:#18191c;}
+.messages{flex:1;padding:10px;overflow:auto;}
+.msg{background:#2a2d36;margin:5px;padding:8px;border-radius:6px;}
+.input{display:flex;padding:10px;background:#18191c;}
+input{flex:1;padding:10px;border:none;border-radius:6px;outline:none;background:#2a2d36;color:white;}
+button{margin-left:10px;padding:10px;background:#7c5cff;border:none;color:white;border-radius:6px;cursor:pointer;}
 </style>
 </head>
-
 <body>
 
 <div class="sidebar">
   <div class="logo">K⨆Rsh</div>
-
-  <div class="channel" onclick="switchRoom('general')"># general</div>
-  <div class="channel" onclick="switchRoom('game')"># game</div>
+  <h4>کاربران آنلاین</h4>
+  <div id="users"></div>
 </div>
 
 <div class="chat">
-
-  <div class="header" id="title"># general</div>
-
+  <div class="header">💬 چت آنلاین</div>
   <div class="messages" id="messages"></div>
-
   <div class="input">
-    <input id="input" placeholder="پیام بنویس..." />
+    <input id="msg" placeholder="پیام..." />
     <button onclick="send()">Send</button>
   </div>
-
 </div>
 
+<script src="/socket.io/socket.io.js"></script>
 <script>
-let room = "general";
-let username = localStorage.getItem("username");
+const socket = io();
+const name = prompt("نام خود را وارد کنید:");
+socket.emit("join", name);
 
-if(!username){
-  username = prompt("نام خود را وارد کن:");
-  localStorage.setItem("username", username);
-}
+socket.on("users", (list)=>{
+  document.getElementById("users").innerHTML =
+    list.map(u => `<div>🟢 ${u}</div>`).join("");
+});
 
-/* ذخیره پیام‌ها */
-let data = JSON.parse(localStorage.getItem("kqursh") || "{}");
-if(!data.general) data.general = [];
-if(!data.game) data.game = [];
+socket.on("message", (m)=>{
+  const div = document.createElement("div");
+  div.className = "msg";
+  div.innerHTML = `<b>${m.user}</b>: ${m.text} <small>${m.time}</small>`;
+  document.getElementById("messages").appendChild(div);
+  document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
+});
 
-/* برای چت بین تب‌ها */
-const bc = new BroadcastChannel("kqursh");
-
-bc.onmessage = (e)=>{
-  const msg = e.data;
-  data[msg.room].push(msg);
-  save();
-  if(msg.room === room) render();
-};
-
-function save(){
-  localStorage.setItem("kqursh", JSON.stringify(data));
-}
-
-/* تغییر روم */
-function switchRoom(r){
-  room = r;
-  document.getElementById("title").innerText = "# " + r;
-  render();
-}
-
-/* ارسال پیام */
 function send(){
-  const input = document.getElementById("input");
+  const input = document.getElementById("msg");
   const text = input.value.trim();
   if(!text) return;
-
-  const msg = {
-    user: username,
-    text,
-    room,
-    time: new Date().toLocaleTimeString()
-  };
-
-  data[room].push(msg);
-  save();
-
-  bc.postMessage(msg);
-
+  socket.emit("message",{user:name,text});
   input.value = "";
-  render();
 }
-
-/* نمایش پیام‌ها */
-function render(){
-  const box = document.getElementById("messages");
-  box.innerHTML = "";
-
-  data[room].forEach(m=>{
-    const div = document.createElement("div");
-    div.className = "msg";
-    div.innerHTML = `<b>${m.user}</b>: ${m.text} <small>${m.time}</small>`;
-    box.appendChild(div);
-  });
-
-  box.scrollTop = box.scrollHeight;
-}
-
-render();
 </script>
 
 </body>
