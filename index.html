@@ -652,3 +652,46 @@ newsData.forEach(n=>{
 
 </body>
 </html>
+const express = require("express");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const cors = require("cors");
+const mongoSanitize = require("express-mongo-sanitize");
+const xss = require("xss-clean");
+
+const app = express();
+
+// 🔒 امنیت هدرهای HTTP
+app.use(helmet());
+
+// 🌐 محدود کردن دسترسی (CORS)
+app.use(cors({
+  origin: "https://your-domain.com",
+  methods: ["GET", "POST", "PUT", "DELETE"]
+}));
+
+// 🚫 جلوگیری از SQL/NoSQL Injection
+app.use(mongoSanitize());
+
+// 🧼 جلوگیری از XSS
+app.use(xss());
+
+// ⛔ محدود کردن درخواست‌ها (Rate Limit)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 دقیقه
+  max: 100 // هر IP نهایت 100 درخواست
+});
+
+app.use(limiter);
+
+// 📦 JSON body
+app.use(express.json());
+
+// تست سرور
+app.get("/", (req, res) => {
+  res.send("Secure Server is running 🔐");
+});
+
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
