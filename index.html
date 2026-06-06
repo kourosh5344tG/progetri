@@ -779,3 +779,383 @@ search.addEventListener("input", ()=>{
     });
 });
 </script>
+<!-- Gallery -->
+<section class="section" id="gallery">
+    <h2 class="section-title">📸 CS2 Gallery</h2>
+
+    <div class="gallery-grid">
+        <img src="https://images.unsplash.com/photo-1542751110-97427bbecf20?w=800" alt="">
+        <img src="https://images.unsplash.com/photo-1511882150382-421056c89033?w=800" alt="">
+        <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=800" alt="">
+        <img src="https://images.unsplash.com/photo-1560253023-3ec5d502959f?w=800" alt="">
+    </div>
+</section>
+
+<!-- Countdown -->
+<section class="section">
+    <h2 class="section-title">⏳ Next Major Countdown</h2>
+
+    <div class="countdown-box">
+        <h3 id="countdown">Loading...</h3>
+    </div>
+</section>
+
+<style>
+.gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.gallery-grid img{
+    width:100%;
+    height:250px;
+    object-fit:cover;
+    border-radius:15px;
+    transition:.4s;
+}
+
+.gallery-grid img:hover{
+    transform:scale(1.05);
+}
+
+.countdown-box{
+    text-align:center;
+    padding:40px;
+    background:rgba(255,255,255,.05);
+    border-radius:15px;
+}
+</style>
+
+<script>
+const targetDate = new Date("December 20, 2026 18:00:00").getTime();
+
+setInterval(()=>{
+
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    const days = Math.floor(distance/(1000*60*60*24));
+    const hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+    const minutes = Math.floor((distance%(1000*60*60))/(1000*60));
+
+    document.getElementById("countdown").innerHTML =
+        `${days} Days ${hours} Hours ${minutes} Minutes`;
+
+},1000);
+</script>
+<!-- Leaderboard -->
+<section class="section">
+    <h2 class="section-title">🏅 Top Players Ranking</h2>
+
+    <div class="card">
+        <table style="width:100%;text-align:center;">
+            <tr>
+                <th>#</th>
+                <th>Player</th>
+                <th>Rating</th>
+            </tr>
+
+            <tr>
+                <td>1</td>
+                <td>donk</td>
+                <td>9.8</td>
+            </tr>
+
+            <tr>
+                <td>2</td>
+                <td>ZywOo</td>
+                <td>9.7</td>
+            </tr>
+
+            <tr>
+                <td>3</td>
+                <td>m0NESY</td>
+                <td>9.5</td>
+            </tr>
+
+            <tr>
+                <td>4</td>
+                <td>s1mple</td>
+                <td>9.4</td>
+            </tr>
+        </table>
+    </div>
+</section>
+
+<!-- Featured Video -->
+<section class="section">
+    <h2 class="section-title">🎬 Highlight Of The Week</h2>
+
+    <div style="max-width:900px;margin:auto;">
+        <iframe
+            width="100%"
+            height="500"
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+            title="CS2 Highlight"
+            frameborder="0"
+            allowfullscreen>
+        </iframe>
+    </div>
+</section>
+
+<!-- Theme Button -->
+<button id="themeBtn">
+    🌙
+</button>
+
+<style>
+#themeBtn{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    width:60px;
+    height:60px;
+    border:none;
+    border-radius:50%;
+    background:#ff8c00;
+    color:black;
+    font-size:24px;
+    cursor:pointer;
+    z-index:9999;
+}
+
+.light-mode{
+    background:#f5f5f5;
+    color:#111;
+}
+
+.light-mode .card,
+.light-mode .news-item{
+    background:white;
+    color:black;
+}
+
+.loading-screen{
+    position:fixed;
+    inset:0;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:10000;
+}
+
+.loader{
+    width:80px;
+    height:80px;
+    border:6px solid #222;
+    border-top:6px solid #ff8c00;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    100%{
+        transform:rotate(360deg);
+    }
+}
+</style>
+
+<div class="loading-screen" id="loader">
+    <div class="loader"></div>
+</div>
+
+<script>
+// Loading
+window.addEventListener("load",()=>{
+    setTimeout(()=>{
+        document.getElementById("loader").style.display="none";
+    },1200);
+});
+
+// Theme
+document.getElementById("themeBtn")
+.addEventListener("click",()=>{
+    document.body.classList.toggle("light-mode");
+});
+</script>
+body{
+    cursor:none;
+}
+
+.cursor-glow{
+    mix-blend-mode:screen;
+    backdrop-filter:blur(4px);
+}
+                    <a href="/auth/steam" class="steam-login">
+    Login with Steam
+</a>
+.steam-login{
+    display:inline-block;
+    padding:15px 30px;
+    background:#171a21;
+    color:white;
+    text-decoration:none;
+    border-radius:10px;
+    font-weight:bold;
+}
+
+.steam-login:hover{
+    box-shadow:0 0 20px #66c0f4;
+}
+                    <div class="card profile-card">
+    <img id="avatar" src="" width="120">
+
+    <h2 id="steamName">Player</h2>
+
+    <div class="stats">
+        <div>
+            <h3 id="kills">0</h3>
+            <p>Kills</p>
+        </div>
+
+        <div>
+            <h3 id="hs">0</h3>
+            <p>Headshots</p>
+        </div>
+
+        <div>
+            <h3 id="wins">0</h3>
+            <p>Wins</p>
+        </div>
+    </div>
+</div>
+<nav>
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#market">Market</a></li>
+        <li><a href="#skins">Skins</a></li>
+        <li><a href="#esports">Esports</a></li>
+    </ul>
+</nav>
+<section class="section" id="market">
+    <h2 class="section-title">🛒 CS2 Market</h2>
+
+    <div class="grid">
+
+        <div class="skin-card">
+            <img src="images/dragonlore.jpg" alt="Dragon Lore"
+                 style="width:100%;border-radius:10px;">
+
+            <h3>AWP | Dragon Lore</h3>
+            <p>Factory New</p>
+            <h4 style="color:#00ff99;">$12,500</h4>
+
+            <button class="btn primary">View</button>
+        </div>
+
+        <div class="skin-card">
+            <img src="images/fireserpent.jpg" alt="Fire Serpent"
+                 style="width:100%;border-radius:10px;">
+
+            <h3>AK-47 | Fire Serpent</h3>
+            <p>Minimal Wear</p>
+            <h4 style="color:#00ff99;">$3,200</h4>
+
+            <button class="btn primary">View</button>
+        </div>
+
+        <div class="skin-card">
+            <img src="images/doppler.jpg" alt="Doppler"
+                 style="width:100%;border-radius:10px;">
+
+            <h3>Karambit | Doppler</h3>
+            <p>Factory New</p>
+            <h4 style="color:#00ff99;">$2,800</h4>
+
+            <button class="btn primary">View</button>
+        </div>
+
+    </div>
+</section>
+.skin-card{
+    background:#111827;
+    border:1px solid #1f2937;
+    overflow:hidden;
+}
+
+.skin-card img{
+    transition:.4s;
+}
+
+.skin-card:hover img{
+    transform:scale(1.08);
+}
+
+.skin-card h4{
+    margin-top:10px;
+    font-size:1.3rem;
+}
+                    <section class="section" id="players">
+    <h2 class="section-title">👥 Community Players</h2>
+
+    <div class="card" style="max-width:600px;margin:auto;">
+        <input
+            type="text"
+            id="playerName"
+            placeholder="Enter Username"
+            style="
+                width:100%;
+                padding:15px;
+                border:none;
+                border-radius:10px;
+                background:#111;
+                color:white;
+                margin-bottom:15px;
+            "
+        >
+
+        <button class="btn primary" onclick="registerPlayer()">
+            Register
+        </button>
+    </div>
+
+    <div class="grid" id="playersList" style="margin-top:30px;"></div>
+</section>
+let players = JSON.parse(
+    localStorage.getItem("players")
+) || [];
+
+function renderPlayers(){
+
+    const list = document.getElementById("playersList");
+
+    list.innerHTML = "";
+
+    players.forEach(name => {
+
+        list.innerHTML += `
+            <div class="card">
+                <h3>🎮 ${name}</h3>
+                <p>CS2 Community Member</p>
+            </div>
+        `;
+
+    });
+
+}
+
+function registerPlayer(){
+
+    const input = document.getElementById("playerName");
+
+    const name = input.value.trim();
+
+    if(!name) return;
+
+    players.push(name);
+
+    localStorage.setItem(
+        "players",
+        JSON.stringify(players)
+    );
+
+    input.value = "";
+
+    renderPlayers();
+
+}
+
+renderPlayers();
+                    
