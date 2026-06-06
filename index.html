@@ -1,64 +1,223 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>K⨆Rsh Chat</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CS2 HUB</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
-body{margin:0;font-family:Arial;display:flex;height:100vh;background:#1e1f22;color:white;}
-.sidebar{width:200px;background:#111;padding:10px;}
-.logo{color:#7c5cff;font-size:22px;font-weight:bold;padding:10px;}
-#users{margin-top:10px;font-size:14px;}
-.chat{flex:1;display:flex;flex-direction:column;}
-.header{padding:10px;background:#18191c;}
-.messages{flex:1;padding:10px;overflow:auto;}
-.msg{background:#2a2d36;margin:5px;padding:8px;border-radius:6px;}
-.input{display:flex;padding:10px;background:#18191c;}
-input{flex:1;padding:10px;border:none;border-radius:6px;outline:none;background:#2a2d36;color:white;}
-button{margin-left:10px;padding:10px;background:#7c5cff;border:none;color:white;border-radius:6px;cursor:pointer;}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Orbitron;
+}
+
+body{
+    background:#0b0c10;
+    color:#c5c6c7;
+}
+
+/* HEADER */
+header{
+    display:flex;
+    justify-content:space-between;
+    padding:20px;
+    background:#1f2833;
+    position:sticky;
+    top:0;
+}
+
+header a{
+    color:#c5c6c7;
+    margin:0 10px;
+    text-decoration:none;
+}
+
+header a:hover{
+    color:#66fcf1;
+}
+
+/* SECTIONS */
+section{
+    display:none;
+    padding:40px;
+}
+
+.active{
+    display:block;
+}
+
+/* HERO */
+.hero{
+    text-align:center;
+    padding:80px 20px;
+    background:linear-gradient(135deg,#1f2833,#45a29e);
+}
+
+.hero h1{
+    font-size:40px;
+    color:white;
+}
+
+.btn{
+    padding:10px 20px;
+    background:#66fcf1;
+    border:none;
+    cursor:pointer;
+    margin-top:20px;
+}
+
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#1f2833;
+    padding:20px;
+    border-radius:10px;
+}
+
+input,textarea{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+}
+
+/* CHAT */
+.chat-box{
+    height:200px;
+    overflow:auto;
+    background:#111;
+    padding:10px;
+    margin-bottom:10px;
+}
+
+.msg{
+    padding:5px;
+    border-bottom:1px solid #333;
+}
+
+/* NAV BUTTON */
+nav button{
+    background:none;
+    border:none;
+    color:#c5c6c7;
+    cursor:pointer;
+}
+
+nav button:hover{
+    color:#66fcf1;
+}
 </style>
 </head>
+
 <body>
 
-<div class="sidebar">
-  <div class="logo">K⨆Rsh</div>
-  <h4>کاربران آنلاین</h4>
-  <div id="users"></div>
-</div>
+<header>
+    <div>CS2 HUB</div>
+    <nav>
+        <button onclick="show('home')">Home</button>
+        <button onclick="show('shop')">Shop</button>
+        <button onclick="show('profile')">Profile</button>
+        <button onclick="show('chat')">Chat</button>
+        <button onclick="show('news')">News</button>
+        <button onclick="show('admin')">Admin</button>
+    </nav>
+</header>
 
-<div class="chat">
-  <div class="header">💬 چت آنلاین</div>
-  <div class="messages" id="messages"></div>
-  <div class="input">
-    <input id="msg" placeholder="پیام..." />
-    <button onclick="send()">Send</button>
-  </div>
-</div>
+<!-- HOME -->
+<section id="home" class="active">
+    <div class="hero">
+        <h1>WELCOME TO CS2 HUB</h1>
+        <p>Ultimate Counter Strike 2 Experience</p>
+        <button class="btn" onclick="show('shop')">Go Shop</button>
+    </div>
+</section>
 
-<script src="/socket.io/socket.io.js"></script>
+<!-- SHOP -->
+<section id="shop">
+    <h2>SHOP</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>AK-47 Redline</h3>
+            <button onclick="addCart('AK-47 Redline')">Buy</button>
+        </div>
+        <div class="card">
+            <h3>AWP Dragon Lore</h3>
+            <button onclick="addCart('AWP Dragon Lore')">Buy</button>
+        </div>
+        <div class="card">
+            <h3>M4A4 Howl</h3>
+            <button onclick="addCart('M4A4 Howl')">Buy</button>
+        </div>
+    </div>
+    <h3>Cart:</h3>
+    <div id="cart"></div>
+</section>
+
+<!-- PROFILE -->
+<section id="profile">
+    <h2>PROFILE</h2>
+    <input id="user" placeholder="Username">
+    <button onclick="login()">Login</button>
+    <p id="welcome"></p>
+</section>
+
+<!-- CHAT -->
+<section id="chat">
+    <h2>CHAT ROOM</h2>
+    <div class="chat-box" id="chatBox"></div>
+    <input id="msg" placeholder="Message">
+    <button onclick="sendMsg()">Send</button>
+</section>
+
+<!-- NEWS -->
+<section id="news">
+    <h2>CS2 NEWS</h2>
+    <div class="card">New Update Released!</div>
+    <div class="card">Pro tournaments announced</div>
+</section>
+
+<!-- ADMIN -->
+<section id="admin">
+    <h2>ADMIN PANEL</h2>
+    <input placeholder="Add item name">
+    <button onclick="alert('Feature demo')">Add</button>
+</section>
+
 <script>
-const socket = io();
-const name = prompt("نام خود را وارد کنید:");
-socket.emit("join", name);
+function show(id){
+    document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
 
-socket.on("users", (list)=>{
-  document.getElementById("users").innerHTML =
-    list.map(u => `<div>🟢 ${u}</div>`).join("");
-});
+/* CART */
+let cart = [];
 
-socket.on("message", (m)=>{
-  const div = document.createElement("div");
-  div.className = "msg";
-  div.innerHTML = `<b>${m.user}</b>: ${m.text} <small>${m.time}</small>`;
-  document.getElementById("messages").appendChild(div);
-  document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
-});
+function addCart(item){
+    cart.push(item);
+    document.getElementById('cart').innerHTML = cart.map(i=>"<div>"+i+"</div>").join("");
+}
 
-function send(){
-  const input = document.getElementById("msg");
-  const text = input.value.trim();
-  if(!text) return;
-  socket.emit("message",{user:name,text});
-  input.value = "";
+/* LOGIN */
+function login(){
+    let u = document.getElementById('user').value;
+    document.getElementById('welcome').innerText = "Welcome " + u;
+}
+
+/* CHAT */
+function sendMsg(){
+    let msg = document.getElementById('msg').value;
+    if(!msg) return;
+    let box = document.getElementById('chatBox');
+    box.innerHTML += "<div class='msg'>" + msg + "</div>";
+    document.getElementById('msg').value = "";
 }
 </script>
 
