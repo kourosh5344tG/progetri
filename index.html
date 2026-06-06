@@ -1,284 +1,288 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>K⨆Rsh - Cyber Gaming Hub</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+<title>K⨆Rsh</title>
 
 <style>
 body{
-    margin:0;
-    background:#000;
-    color:#fff;
-    font-family:Orbitron;
-    overflow-x:hidden;
+margin:0;
+font-family:tahoma;
+background:#0d0d12;
+color:#fff;
+display:flex;
+height:100vh;
 }
 
-/* ===== Background Glow ===== */
-.bg{
-    position:fixed;
-    width:100%;
-    height:100%;
-    background:
-    radial-gradient(circle at top, #0ff2 0%, transparent 40%),
-    radial-gradient(circle at bottom, #f0f2 0%, transparent 40%),
-    #000;
-    z-index:0;
+/* sidebar */
+.sidebar{
+width:220px;
+background:#111;
+padding:10px;
+border-right:1px solid #333;
 }
 
-/* ===== Header ===== */
+.server{
+padding:10px;
+margin:5px 0;
+background:#1a1a1a;
+cursor:pointer;
+border-radius:6px;
+}
+
+.server:hover{background:#333;}
+
+/* main */
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
 header{
-    text-align:center;
-    font-size:55px;
-    letter-spacing:10px;
-    padding:25px;
-    text-shadow:0 0 20px #0ff, 0 0 40px #f0f;
-    animation: glow 2s infinite alternate;
-    position:relative;
-    z-index:10;
+padding:10px;
+border-bottom:1px solid #333;
 }
 
-@keyframes glow{
-    from{filter:brightness(1);}
-    to{filter:brightness(1.5);}
+#chat{
+flex:1;
+overflow:auto;
+padding:10px;
 }
 
-/* ===== Subtitle ===== */
-.sub{
-    text-align:center;
-    opacity:0.7;
-    margin-top:-10px;
-    letter-spacing:3px;
+.msg{
+margin:6px 0;
+padding:5px;
+border-bottom:1px solid #222;
 }
 
-/* ===== Menu ===== */
-.nav{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:10px;
-    margin:25px 0;
+.user{color:#0f0;}
+.admin{color:#f55;}
+
+.inputBox{
+display:flex;
+padding:10px;
+border-top:1px solid #333;
 }
 
-.nav button{
-    background:rgba(255,255,255,0.05);
-    border:1px solid #0ff;
-    color:#0ff;
-    padding:10px 15px;
-    cursor:pointer;
-    transition:0.3s;
-}
-
-.nav button:hover{
-    background:#0ff;
-    color:#000;
-    box-shadow:0 0 15px #0ff;
-}
-
-/* ===== Sections ===== */
-.section{
-    width:85%;
-    margin:20px auto;
-    display:none;
-    z-index:10;
-    position:relative;
-}
-
-.active{display:block;}
-
-/* ===== Cards ===== */
-.card{
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(0,255,255,0.3);
-    padding:15px;
-    margin:10px 0;
-    border-radius:12px;
-    backdrop-filter:blur(10px);
-    transition:0.3s;
-}
-
-.card:hover{
-    transform:scale(1.03);
-    box-shadow:0 0 20px #0ff;
-}
-
-/* ===== Input ===== */
 input{
-    width:100%;
-    padding:10px;
-    margin:10px 0;
-    background:#111;
-    border:1px solid #0ff;
-    color:#fff;
+flex:1;
+padding:10px;
+background:#111;
+border:none;
+color:#fff;
 }
 
-/* ===== Button ===== */
-button.submit{
-    width:100%;
-    padding:10px;
-    background:#0ff;
-    border:none;
-    cursor:pointer;
-    font-weight:bold;
+button{
+padding:10px;
+background:#fff;
+border:none;
+cursor:pointer;
+color:#000;
 }
 
-/* ===== Particles ===== */
-.particle{
-    position:fixed;
-    width:3px;
-    height:3px;
-    background:#0ff;
-    border-radius:50%;
-    pointer-events:none;
-    box-shadow:0 0 10px #0ff;
+/* right panel */
+.right{
+width:240px;
+background:#111;
+border-left:1px solid #333;
+padding:10px;
 }
+
+.small{font-size:12px;color:#aaa;}
 </style>
 </head>
 
 <body>
 
-<div class="bg"></div>
+<!-- SERVERS -->
+<div class="sidebar">
+<h3>📡 Servers</h3>
 
-<header>K⨆Rsh</header>
-<div class="sub">CYBER GAMING HUB • CS2 • SKINS • AI SYSTEM</div>
+<div class="server" onclick="setServer('K⨆Rsh')">K⨆Rsh Server</div>
+<div class="server" onclick="setServer('Life')">Life</div>
+<div class="server" onclick="setServer('News')">News</div>
 
-<!-- MENU -->
-<div class="nav">
-    <button onclick="show('home')">Home</button>
-    <button onclick="show('ai')">AI System</button>
-    <button onclick="show('cs')">CS2 Universe</button>
-    <button onclick="show('skins')">Weapon Skins</button>
-    <button onclick="show('players')">Pro Players</button>
 </div>
 
-<!-- HOME -->
-<div id="home" class="section active">
-    <div class="card">
-        🚀 Welcome to <b>K⨆Rsh Cyber Hub</b><br><br>
-        "Where gaming meets intelligence and style."
-    </div>
+<!-- CHAT -->
+<div class="main">
+
+<header>
+<h2>K⨆Rsh DISCORD FINAL</h2>
+<p id="status">Not logged in</p>
+</header>
+
+<div id="chat"></div>
+
+<div class="inputBox">
+<input id="msg" placeholder="پیام...">
+<button onclick="send()">Send</button>
 </div>
 
-<!-- AI -->
-<div id="ai" class="section">
-    <div class="card">🧠 K⨆Rsh AI Assistant</div>
-
-    <input id="q" placeholder="Ask anything about CS2...">
-    <button class="submit" onclick="askAI()">Send Query</button>
-
-    <div id="aiChat"></div>
 </div>
 
-<!-- CS2 -->
-<div id="cs" class="section">
-    <div class="card">
-        <h2>🎮 Counter-Strike 2 Universe</h2>
-        <p>"Built on Source 2 engine with next-gen physics and smoke simulation."</p>
-    </div>
+<!-- PANEL -->
+<div class="right">
 
-    <div class="card">🔥 Feature: Dynamic Smoke System</div>
-    <div class="card">⚡ Feature: Enhanced FPS Optimization</div>
-    <div class="card">🎯 Feature: Improved Hit Registration</div>
+<h3>👤 Login</h3>
+<input id="username" placeholder="نام">
+<button onclick="login()">Login</button>
+
+<hr>
+
+<h3>🛡 Admin</h3>
+<input id="target" placeholder="UID">
+<button onclick="kick()">Kick</button>
+<button onclick="ban()">Ban</button>
+
+<p class="small">Role-based Discord system</p>
+
 </div>
 
-<!-- SKINS -->
-<div id="skins" class="section">
-    <div class="card">💎 AK-47 | Neon Revolution</div>
-    <div class="card">🔥 Karambit | Dragon Flame</div>
-    <div class="card">⚔️ M4A4 | Cyber Pulse</div>
-</div>
+<script type="module">
 
-<!-- PLAYERS -->
-<div id="players" class="section">
-    <div class="card">🏆 s1mple — "The God of AWP"</div>
-    <div class="card">⚡ ZywOo — "The Silent Killer"</div>
-    <div class="card">🔥 NiKo — "Mechanical Aim Monster"</div>
-</div>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+getFirestore,
+collection,
+addDoc,
+onSnapshot,
+query,
+doc,
+setDoc,
+getDoc,
+deleteDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-<script>
+import {
+getAuth,
+signInAnonymously,
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-/* ===== Tabs ===== */
-function show(id){
-    document.querySelectorAll('.section')
-    .forEach(s=>s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+/* 🔴 Firebase config */
+const firebaseConfig = {
+apiKey: "YOUR_API_KEY",
+authDomain: "YOUR_PROJECT.firebaseapp.com",
+projectId: "YOUR_PROJECT_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+signInAnonymously(auth);
+
+let uid=null;
+let name=null;
+let role="user";
+let server="K⨆Rsh";
+
+const chatRef=collection(db,"chat");
+const usersRef=collection(db,"users");
+const banRef=collection(db,"banned");
+
+/* AUTH */
+onAuthStateChanged(auth,(user)=>{
+if(user){
+uid=user.uid;
 }
-
-/* ===== AI SYSTEM ===== */
-function askAI(){
-    let q = document.getElementById("q").value.toLowerCase();
-
-    let reply = "🤖 I am K⨆Rsh AI. Ask me about CS2, weapons, ranks or esports.";
-
-    if(q.includes("cs2")){
-        reply = "🎮 CS2 is powered by Source 2 engine with ultra realistic smoke physics.";
-    }
-    else if(q.includes("skin")){
-        reply = "💎 Skins are cosmetic weapon upgrades with market value & rarity tiers.";
-    }
-    else if(q.includes("rank")){
-        reply = "🏆 Ranking system: Silver → Gold → DMG → Global Elite.";
-    }
-    else if(q.includes("pro")){
-        reply = "🔥 Pro players train over 8 hours daily for competitive dominance.";
-    }
-
-    let div = document.createElement("div");
-    div.className="card";
-    div.innerText="AI: " + reply;
-
-    document.getElementById("aiChat").appendChild(div);
-}
-
-/* ===== Particles Engine ===== */
-const particles=[];
-const mouse={x:innerWidth/2,y:innerHeight/2};
-
-document.addEventListener("mousemove",e=>{
-    mouse.x=e.clientX;
-    mouse.y=e.clientY;
 });
 
-for(let i=0;i<100;i++){
-    particles.push({
-        x:Math.random()*innerWidth,
-        y:Math.random()*innerHeight,
-        vx:0,vy:0
-    });
+/* LOGIN */
+window.login=async function(){
+name=document.getElementById("username").value;
+if(!name) return;
+
+await setDoc(doc(usersRef,uid),{
+uid,
+name,
+role:"user"
+});
+
+let snap=await getDoc(doc(usersRef,uid));
+if(snap.exists()){
+role=snap.data().role;
 }
 
-function animate(){
-    particles.forEach(p=>{
-        let dx=mouse.x-p.x;
-        let dy=mouse.y-p.y;
-        let dist=Math.sqrt(dx*dx+dy*dy);
-
-        if(dist<160){
-            p.vx+=dx*0.002;
-            p.vy+=dy*0.002;
-        }
-
-        p.vx*=0.92;
-        p.vy*=0.92;
-
-        p.x+=p.vx;
-        p.y+=p.vy;
-
-        if(!p.el){
-            p.el=document.createElement("div");
-            p.el.className="particle";
-            document.body.appendChild(p.el);
-        }
-
-        p.el.style.left=p.x+"px";
-        p.el.style.top=p.y+"px";
-    });
-
-    requestAnimationFrame(animate);
+document.getElementById("status").innerText=
+name+" | "+role;
 }
 
-animate();
+/* SERVER SWITCH */
+window.setServer=function(s){
+server=s;
+loadChat();
+}
+
+/* SEND */
+window.send=async function(){
+
+if(!uid) return alert("Login first");
+
+let ban=await getDoc(doc(banRef,uid));
+if(ban.exists()) return alert("BANNED");
+
+let msg=document.getElementById("msg").value;
+if(!msg) return;
+
+await addDoc(chatRef,{
+uid,
+name,
+text:msg,
+server,
+time:Date.now()
+});
+
+document.getElementById("msg").value="";
+}
+
+/* CHAT LOAD */
+function loadChat(){
+onSnapshot(query(chatRef),(snap)=>{
+let chat=document.getElementById("chat");
+chat.innerHTML="";
+
+snap.forEach(d=>{
+let data=d.data();
+if(data.server!==server) return;
+
+chat.innerHTML+=`
+<div class="msg user">
+<b>${data.name}</b>: ${data.text}
+</div>`;
+});
+
+chat.scrollTop=chat.scrollHeight;
+});
+}
+
+loadChat();
+
+/* KICK */
+window.kick=async function(){
+if(role!=="admin") return alert("No permission");
+
+let t=document.getElementById("target").value;
+await deleteDoc(doc(usersRef,t));
+alert("Kicked: "+t);
+}
+
+/* BAN */
+window.ban=async function(){
+if(role!=="admin") return alert("No permission");
+
+let t=document.getElementById("target").value;
+
+await setDoc(doc(banRef,t),{
+banned:true
+});
+
+await deleteDoc(doc(usersRef,t));
+
+alert("Banned: "+t);
+}
 
 </script>
 
