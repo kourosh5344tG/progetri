@@ -436,3 +436,219 @@ cs2News.forEach(n=>{
     newsBox.appendChild(div);
 });
 </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>k⨆Rsh PRO MAX</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+<style>
+body{
+    margin:0;
+    font-family:sans-serif;
+    background:#050505;
+    color:white;
+    cursor:none;
+    overflow-x:hidden;
+}
+
+/* background */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at 20% 20%, #ff8c0020, transparent 40%),
+    radial-gradient(circle at 80% 30%, #00aaff20, transparent 40%);
+    z-index:-1;
+}
+
+/* cursor */
+#cursor{
+    width:10px;
+    height:10px;
+    background:#ff8c00;
+    position:fixed;
+    border-radius:50%;
+    pointer-events:none;
+    box-shadow:0 0 15px #ff8c00;
+    z-index:99999;
+}
+
+/* cards */
+.card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
+    backdrop-filter:blur(10px);
+    border-radius:12px;
+    padding:20px;
+    margin:20px;
+}
+
+/* buttons */
+button{
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+/* game */
+#game{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.95);
+    text-align:center;
+    z-index:9999;
+}
+
+.target{
+    width:60px;
+    height:60px;
+    background:red;
+    border-radius:50%;
+    position:absolute;
+    box-shadow:0 0 20px red;
+}
+
+/* chat */
+#chatBox{
+    display:none;
+    position:fixed;
+    bottom:170px;
+    right:20px;
+    width:300px;
+    height:380px;
+    background:#111;
+    border:1px solid #333;
+    border-radius:10px;
+    padding:10px;
+    z-index:99999;
+}
+
+#messages{
+    height:270px;
+    overflow:auto;
+    font-size:13px;
+}
+
+/* news */
+.news{
+    padding:10px;
+    margin:10px 0;
+    background:rgba(255,255,255,0.05);
+    border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="cursor"></div>
+
+<!-- buttons -->
+<button onclick="startGame()" style="position:fixed;bottom:70px;right:20px;background:#00aaff;">🎮</button>
+<button onclick="toggleChat()" style="position:fixed;bottom:120px;right:20px;background:#00ff88;">💬</button>
+
+<h1 style="text-align:center;margin-top:60px;">k⨆Rsh PRO MAX</h1>
+
+<!-- NEWS -->
+<div class="card">
+<h2>📰 CS2 News</h2>
+<div id="news"></div>
+</div>
+
+<!-- GAME -->
+<div id="game">
+<h1>🎯 Headshot Game</h1>
+<h2>Score: <span id="score">0</span></h2>
+<div class="target" id="target" onclick="hit()"></div>
+<br>
+<button onclick="exitGame()">Exit</button>
+</div>
+
+<!-- CHAT -->
+<div id="chatBox">
+<div id="messages"></div>
+<input id="msg" placeholder="message..." style="width:100%;padding:6px;">
+<button onclick="sendMsg()" style="width:100%;margin-top:5px;">Send</button>
+</div>
+
+<script>
+
+/* cursor */
+document.addEventListener("mousemove",(e)=>{
+    let c=document.getElementById("cursor");
+    c.style.left=e.clientX+"px";
+    c.style.top=e.clientY+"px";
+});
+
+/* GAME */
+let score=0;
+
+function startGame(){
+    document.getElementById("game").style.display="block";
+    score=0;
+    document.getElementById("score").innerText=score;
+    moveTarget();
+}
+
+function exitGame(){
+    document.getElementById("game").style.display="none";
+}
+
+function hit(){
+    score++;
+    document.getElementById("score").innerText=score;
+    moveTarget();
+}
+
+function moveTarget(){
+    let t=document.getElementById("target");
+    t.style.left=Math.random()*80+"vw";
+    t.style.top=Math.random()*80+"vh";
+}
+
+/* CHAT (simple local system) */
+function toggleChat(){
+    let box=document.getElementById("chatBox");
+    box.style.display = box.style.display==="block"?"none":"block";
+}
+
+function sendMsg(){
+    let msg=document.getElementById("msg").value;
+    if(!msg) return;
+
+    let div=document.createElement("div");
+    div.innerText="🧑 "+msg;
+    document.getElementById("messages").appendChild(div);
+
+    document.getElementById("msg").value="";
+}
+
+/* NEWS */
+const newsData = [
+  "🔥 CS2 update improved movement physics",
+  "🎯 New anti-cheat system testing started",
+  "💰 Skin market prices increased again",
+  "🏆 Upcoming Major tournament announced"
+];
+
+let newsBox=document.getElementById("news");
+
+newsData.forEach(n=>{
+    let div=document.createElement("div");
+    div.className="news";
+    div.innerText=n;
+    newsBox.appendChild(div);
+});
+
+</script>
+
+</body>
+</html>
