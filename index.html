@@ -209,3 +209,784 @@ render();
 </body>
 </html>
                     
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>k⨆Rsh - CS2 & CS:GO Hub</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#050505;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* Background Effects */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,140,0,.15), transparent 30%),
+        radial-gradient(circle at 80% 30%, rgba(0,174,255,.15), transparent 30%),
+        radial-gradient(circle at 50% 80%, rgba(255,255,255,.04), transparent 40%);
+    z-index:-2;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:url("https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1920&q=80") center/cover;
+    opacity:.08;
+    z-index:-1;
+}
+
+/* Navbar */
+nav{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:25px 10%;
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.logo{
+    font-size:2rem;
+    font-weight:900;
+    color:#ff8c00;
+    text-shadow:0 0 20px #ff8c00;
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:30px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    transition:.3s;
+}
+
+nav a:hover{
+    color:#00aaff;
+}
+
+/* Hero */
+.hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:40px;
+}
+
+.hero h1{
+    font-size:6rem;
+    font-weight:900;
+    letter-spacing:4px;
+    color:#fff;
+    text-shadow:
+        0 0 10px #fff,
+        0 0 20px #ff8c00,
+        0 0 40px #ff8c00;
+}
+
+.hero h2{
+    margin-top:15px;
+    font-size:2rem;
+    color:#00aaff;
+}
+
+.hero p{
+    margin-top:20px;
+    max-width:800px;
+    color:#bdbdbd;
+    line-height:1.7;
+}
+
+.btns{
+    margin-top:35px;
+    display:flex;
+    gap:20px;
+}
+
+.btn{
+    padding:15px 35px;
+    border:none;
+    cursor:pointer;
+    font-weight:bold;
+    border-radius:8px;
+    transition:.3s;
+}
+
+.primary{
+    background:#ff8c00;
+    color:black;
+}
+
+.primary:hover{
+    transform:translateY(-4px);
+    box-shadow:0 0 25px #ff8c00;
+}
+
+.secondary{
+    background:transparent;
+    color:white;
+    border:2px solid #00aaff;
+}
+
+.secondary:hover{
+    background:#00aaff;
+    color:black;
+}
+
+/* Cards */
+.section{
+    padding:100px 10%;
+}
+
+.section-title{
+    text-align:center;
+    font-size:3rem;
+    margin-bottom:50px;
+    color:#fff;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:15px;
+    padding:30px;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 0 25px rgba(255,140,0,.3);
+}
+
+.card h3{
+    margin-bottom:15px;
+    color:#ff8c00;
+}
+
+.card p{
+    color:#cfcfcf;
+    line-height:1.6;
+}
+
+/* News */
+.news-item{
+    margin-bottom:25px;
+    padding:25px;
+    border-left:4px solid #00aaff;
+    background:rgba(255,255,255,.03);
+}
+
+.news-item h4{
+    color:#00aaff;
+    margin-bottom:10px;
+}
+
+/* Footer */
+footer{
+    text-align:center;
+    padding:40px;
+    color:#888;
+    border-top:1px solid rgba(255,255,255,.08);
+}
+
+/* Glow particles */
+.particle{
+    position:fixed;
+    width:4px;
+    height:4px;
+    background:#ff8c00;
+    border-radius:50%;
+    animation:float 12s linear infinite;
+    opacity:.5;
+}
+
+@keyframes float{
+    from{
+        transform:translateY(100vh);
+    }
+    to{
+        transform:translateY(-100vh);
+    }
+}
+
+@media(max-width:768px){
+    .hero h1{
+        font-size:3rem;
+    }
+
+    .hero h2{
+        font-size:1.3rem;
+    }
+
+    nav{
+        flex-direction:column;
+        gap:20px;
+    }
+
+    nav ul{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+}
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">k⨆Rsh</div>
+
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">CS2 News</a></li>
+        <li><a href="#">Highlights</a></li>
+        <li><a href="#">Esports</a></li>
+        <li><a href="#">Skins</a></li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <h1>k⨆Rsh</h1>
+    <h2>Counter-Strike 2 & CS:GO</h2>
+
+    <p>
+        The ultimate destination for CS2 and CS:GO players.
+        Get the latest news, esports updates, epic highlights,
+        headshots, tournaments, skins and gameplay content in one place.
+    </p>
+
+    <div class="btns">
+        <button class="btn primary">Latest News</button>
+        <button class="btn secondary">Watch Highlights</button>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="section-title">🔥 Main Categories</h2>
+
+    <div class="grid">
+        <div class="card">
+            <h3>🎯 CS2 News</h3>
+            <p>
+                Latest updates, patch notes, map changes,
+                weapon balancing and Valve announcements.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>💥 Highlights</h3>
+            <p>
+                Amazing AWP shots, aces, clutch plays,
+                headshots and unforgettable moments.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>🏆 Esports</h3>
+            <p>
+                Major tournaments, rankings,
+                professional teams and player statistics.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>💎 Skins Market</h3>
+            <p>
+                Trending skins, market values,
+                investments and rare collectibles.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="section-title">📰 Latest News</h2>
+
+    <div class="news-item">
+        <h4>Source 2 Engine</h4>
+        <p>
+            CS2 introduces major visual improvements,
+            responsive smoke physics and enhanced performance.
+        </p>
+    </div>
+
+    <div class="news-item">
+        <h4>Sub-Tick System</h4>
+        <p>
+            A new networking system improves hit registration
+            and gameplay responsiveness.
+        </p>
+    </div>
+
+    <div class="news-item">
+        <h4>Competitive Scene</h4>
+        <p>
+            Professional teams continue adapting to new maps,
+            meta changes and tournament formats.
+        </p>
+    </div>
+</section>
+
+<footer>
+    © 2026 k⨆Rsh • CS2 & CS:GO Community
+</footer>
+
+<script>
+for(let i=0;i<40;i++){
+    let p=document.createElement("div");
+    p.className="particle";
+    p.style.left=Math.random()*100+"vw";
+    p.style.animationDuration=(8+Math.random()*15)+"s";
+    p.style.opacity=Math.random();
+    document.body.appendChild(p);
+}
+</script>
+
+</body>
+</html>
+<section class="section">
+    <h2 class="section-title">📰 Latest CS2 News</h2>
+
+    <div class="news-item">
+        <h4>🔥 Cologne Major 2026 Sticker Market Explosion</h4>
+        <p>
+            پس از تغییرات جدید Valve در Major Shop، قیمت برخی استیکرهای
+            Cologne 2026 به شکل عجیبی افزایش یافت و خرید مجموعه کامل
+            استیکرهای برتر به نزدیک 20 هزار دلار رسیده است.
+        </p>
+    </div>
+
+    <div class="news-item">
+        <h4>🗺️ Return of Cache</h4>
+        <p>
+            مپ افسانه‌ای Cache دوباره به CS2 بازگشته است.
+            این نسخه با موتور Source 2 بازسازی شده و نورپردازی،
+            بافت‌ها و جزئیات گرافیکی آن کاملاً به‌روزرسانی شده‌اند.
+        </p>
+    </div>
+
+    <div class="news-item">
+        <h4>⚡ Animation System Upgrade</h4>
+        <p>
+            Valve نسخه بتای Animgraph 2 را منتشر کرده که مصرف CPU
+            و هزینه‌های شبکه مربوط به انیمیشن‌ها را کاهش می‌دهد
+            و عملکرد بازی را بهبود می‌بخشد.
+        </p>
+    </div>
+
+    <div class="news-item">
+        <h4>🎯 New Reload System</h4>
+        <p>
+            یکی از بزرگ‌ترین تغییرات تاریخ Counter-Strike:
+            اکنون هنگام Reload کردن، گلوله‌های باقی‌مانده در خشاب
+            از بین می‌روند و بازیکنان باید مدیریت مهمات را جدی‌تر بگیرند.
+        </p>
+    </div>
+
+    <div class="news-item">
+        <h4>🏆 IEM Cologne Major 2026</h4>
+        <p>
+            مسابقات Major جدید از 2 تا 21 ژوئن 2026 در شهر کلن آلمان
+            برگزار می‌شود و 32 تیم برتر جهان برای قهرمانی رقابت می‌کنند.
+        </p>
+    </div>
+</section>
+<!-- Top Players -->
+<section class="section">
+    <h2 class="section-title">⭐ Top CS2 Players</h2>
+
+    <div class="grid">
+        <div class="card">
+            <h3>s1mple</h3>
+            <p>
+                Legendary AWPer known for incredible aim,
+                clutch plays and world-class consistency.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>ZywOo</h3>
+            <p>
+                One of the most dominant players in CS history
+                with elite rifle and AWP skills.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>donk</h3>
+            <p>
+                Rising superstar famous for aggressive entries,
+                lightning-fast reactions and high impact rounds.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>m0NESY</h3>
+            <p>
+                Young prodigy with exceptional mechanical skill
+                and incredible flick shots.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Tournament Section -->
+<section class="section">
+    <h2 class="section-title">🏆 Upcoming Tournaments</h2>
+
+    <div class="grid">
+
+        <div class="card">
+            <h3>IEM Cologne</h3>
+            <p>
+                One of the biggest Counter-Strike events of the year
+                featuring the world's best teams.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>BLAST Premier</h3>
+            <p>
+                Elite international tournament with massive prize pools
+                and top-tier production.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>ESL Pro League</h3>
+            <p>
+                Long-format competition where teams battle
+                for global rankings and prestige.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Skin Showcase -->
+<section class="section">
+    <h2 class="section-title">💎 Popular Skins</h2>
+
+    <div class="grid">
+
+        <div class="card">
+            <h3>AK-47 | Fire Serpent</h3>
+            <p>
+                One of the most iconic AK skins with extremely high value.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>AWP | Dragon Lore</h3>
+            <p>
+                The most legendary sniper skin ever released in Counter-Strike.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>Karambit | Doppler</h3>
+            <p>
+                Premium knife skin featuring beautiful phase patterns.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>M4A4 | Howl</h3>
+            <p>
+                Contraband rarity skin known for its unique history.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Statistics -->
+<section class="section">
+    <h2 class="section-title">📊 Community Statistics</h2>
+
+    <div class="grid">
+
+        <div class="card">
+            <h3>35M+</h3>
+            <p>Registered Counter-Strike Players</p>
+        </div>
+
+        <div class="card">
+            <h3>1.8M+</h3>
+            <p>Average Daily Active Players</p>
+        </div>
+
+        <div class="card">
+            <h3>100K+</h3>
+            <p>Skins Traded Every Day</p>
+        </div>
+
+        <div class="card">
+            <h3>500+</h3>
+            <p>Professional Teams Worldwide</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Contact -->
+<section class="section">
+    <h2 class="section-title">📬 Join The Community</h2>
+
+    <div class="card" style="max-width:700px;margin:auto;text-align:center;">
+        <h3>Stay Updated</h3>
+        <p style="margin:20px 0;">
+            Subscribe to receive CS2 news, esports updates,
+            patch notes and exclusive content.
+        </p>
+
+        <input
+            type="email"
+            placeholder="Your Email"
+            style="
+                width:100%;
+                padding:15px;
+                border:none;
+                border-radius:8px;
+                margin-bottom:15px;
+                background:#111;
+                color:white;
+            "
+        >
+
+        <button class="btn primary">
+            Subscribe
+        </button>
+    </div>
+</section>
+input:focus{
+    outline:none;
+    box-shadow:0 0 15px #00aaff;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+.card{
+    backdrop-filter:blur(12px);
+}
+
+.news-item:hover{
+    transform:translateX(10px);
+    transition:.3s;
+    border-left-color:#ff8c00;
+}
+<script>
+
+document.querySelector(".primary")
+.addEventListener("click",()=>{
+
+    document.querySelectorAll(".section")[1]
+    .scrollIntoView({
+        behavior:"smooth"
+    });
+
+});
+
+document.querySelector(".secondary")
+.addEventListener("click",()=>{
+
+    window.scrollTo({
+        top:document.body.scrollHeight/2,
+        behavior:"smooth"
+    });
+
+});
+
+</script>
+<nav>
+    <div class="logo">k⨆Rsh</div>
+
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#news">CS2 News</a></li>
+        <li><a href="#highlights">Highlights</a></li>
+        <li><a href="#esports">Esports</a></li>
+        <li><a href="#skins">Skins</a></li>
+    </ul>
+</nav>
+<section class="hero" id="home">
+    <section class="section" id="news">
+        <section class="section" id="highlights">
+            <section class="section" id="esports">
+                <section class="section" id="skins">
+                    html{
+    scroll-behavior:smooth;
+}
+                    <script>
+document.querySelectorAll("nav a").forEach(link => {
+    link.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        const targetId = this.getAttribute("href");
+        const target = document.querySelector(targetId);
+
+        if (target) {
+            target.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+    });
+});
+</script>
+<section class="section" id="skins">
+    <h2 class="section-title">💎 CS2 Skins Collection</h2>
+
+    <!-- Search -->
+    <div style="text-align:center;margin-bottom:30px;">
+        <input id="skinSearch" type="text" placeholder="Search skins..."
+            style="
+                padding:15px;
+                width:60%;
+                max-width:500px;
+                border:none;
+                border-radius:10px;
+                background:#111;
+                color:white;
+            ">
+    </div>
+
+    <!-- Filters -->
+    <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:30px;">
+        <button class="filter-btn" data-type="all">All</button>
+        <button class="filter-btn" data-type="ak">AK-47</button>
+        <button class="filter-btn" data-type="awp">AWP</button>
+        <button class="filter-btn" data-type="knife">Knives</button>
+        <button class="filter-btn" data-type="m4">M4</button>
+    </div>
+
+    <!-- Skins Grid -->
+    <div class="skins-grid">
+
+        <div class="skin-card" data-type="ak">
+            <h3>AK-47 | Fire Serpent</h3>
+            <p>Legendary rare AK skin</p>
+        </div>
+
+        <div class="skin-card" data-type="awp">
+            <h3>AWP | Dragon Lore</h3>
+            <p>Most iconic sniper skin</p>
+        </div>
+
+        <div class="skin-card" data-type="knife">
+            <h3>Karambit | Doppler</h3>
+            <p>Premium knife animation skin</p>
+        </div>
+
+        <div class="skin-card" data-type="m4">
+            <h3>M4A4 | Howl</h3>
+            <p>Rare contraband skin</p>
+        </div>
+
+        <div class="skin-card" data-type="ak">
+            <h3>AK-47 | Asiimov</h3>
+            <p>Futuristic white/orange design</p>
+        </div>
+
+        <div class="skin-card" data-type="awp">
+            <h3>AWP | Asiimov</h3>
+            <p>Clean sci-fi sniper skin</p>
+        </div>
+
+    </div>
+</section>
+.skins-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.skin-card{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    padding:20px;
+    border-radius:15px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.skin-card:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 20px rgba(0,170,255,.3);
+}
+
+.filter-btn{
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#111;
+    color:white;
+    transition:.3s;
+}
+
+.filter-btn:hover{
+    background:#00aaff;
+    color:black;
+}
+                    <script>
+const cards = document.querySelectorAll(".skin-card");
+const buttons = document.querySelectorAll(".filter-btn");
+const search = document.getElementById("skinSearch");
+
+// FILTER SYSTEM
+buttons.forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+        const type = btn.dataset.type;
+
+        cards.forEach(card=>{
+            if(type === "all"){
+                card.style.display = "block";
+            } else {
+                card.style.display =
+                    card.dataset.type === type ? "block" : "none";
+            }
+        });
+    });
+});
+
+// SEARCH SYSTEM
+search.addEventListener("input", ()=>{
+    const value = search.value.toLowerCase();
+
+    cards.forEach(card=>{
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(value) ? "block" : "none";
+    });
+});
+</script>
