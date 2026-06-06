@@ -1,289 +1,198 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa">
 <head>
 <meta charset="UTF-8">
 <title>K⨆Rsh</title>
 
 <style>
 body{
-margin:0;
-font-family:tahoma;
-background:#0d0d12;
-color:#fff;
-display:flex;
-height:100vh;
+  margin:0;
+  display:flex;
+  height:100vh;
+  font-family:Arial;
+  background:#1e1f22;
+  color:white;
 }
 
-/* sidebar */
+/* SIDEBAR */
 .sidebar{
-width:220px;
-background:#111;
-padding:10px;
-border-right:1px solid #333;
+  width:240px;
+  background:#111214;
+  padding:10px;
 }
 
-.server{
-padding:10px;
-margin:5px 0;
-background:#1a1a1a;
-cursor:pointer;
-border-radius:6px;
+.logo{
+  font-size:22px;
+  color:#7c5cff;
+  padding:10px;
+  font-weight:bold;
 }
 
-.server:hover{background:#333;}
-
-/* main */
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
+.channel{
+  padding:10px;
+  margin:5px 0;
+  background:#2a2d36;
+  border-radius:6px;
+  cursor:pointer;
 }
 
-header{
-padding:10px;
-border-bottom:1px solid #333;
+.channel:hover{
+  background:#3a3d46;
 }
 
-#chat{
-flex:1;
-overflow:auto;
-padding:10px;
+/* CHAT */
+.chat{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+
+.header{
+  padding:10px;
+  background:#18191c;
+  border-bottom:1px solid #2a2b30;
+}
+
+.messages{
+  flex:1;
+  overflow:auto;
+  padding:10px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
 
 .msg{
-margin:6px 0;
-padding:5px;
-border-bottom:1px solid #222;
+  background:#2a2d36;
+  padding:8px;
+  border-radius:6px;
+  max-width:70%;
+  word-wrap:break-word;
 }
 
-.user{color:#0f0;}
-.admin{color:#f55;}
-
-.inputBox{
-display:flex;
-padding:10px;
-border-top:1px solid #333;
+.input{
+  display:flex;
+  padding:10px;
+  background:#18191c;
 }
 
 input{
-flex:1;
-padding:10px;
-background:#111;
-border:none;
-color:#fff;
+  flex:1;
+  padding:10px;
+  border:none;
+  outline:none;
+  border-radius:6px;
+  background:#2a2d36;
+  color:white;
 }
 
 button{
-padding:10px;
-background:#fff;
-border:none;
-cursor:pointer;
-color:#000;
+  margin-left:10px;
+  padding:10px;
+  background:#7c5cff;
+  border:none;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
 }
-
-/* right panel */
-.right{
-width:240px;
-background:#111;
-border-left:1px solid #333;
-padding:10px;
-}
-
-.small{font-size:12px;color:#aaa;}
 </style>
 </head>
 
 <body>
 
-<!-- SERVERS -->
 <div class="sidebar">
-<h3>📡 Servers</h3>
+  <div class="logo">K⨆Rsh</div>
 
-<div class="server" onclick="setServer('K⨆Rsh')">K⨆Rsh Server</div>
-<div class="server" onclick="setServer('Life')">Life</div>
-<div class="server" onclick="setServer('News')">News</div>
+  <div class="channel" onclick="switchRoom('general')"># general</div>
+  <div class="channel" onclick="switchRoom('game')"># game</div>
+</div>
+
+<div class="chat">
+
+  <div class="header" id="title"># general</div>
+
+  <div class="messages" id="messages"></div>
+
+  <div class="input">
+    <input id="input" placeholder="پیام بنویس..." />
+    <button onclick="send()">Send</button>
+  </div>
 
 </div>
 
-<!-- CHAT -->
-<div class="main">
+<script>
+let room = "general";
+let username = localStorage.getItem("username");
 
-<header>
-<h2>K⨆Rsh DISCORD FINAL</h2>
-<p id="status">Not logged in</p>
-</header>
+if(!username){
+  username = prompt("نام خود را وارد کن:");
+  localStorage.setItem("username", username);
+}
 
-<div id="chat"></div>
+/* ذخیره پیام‌ها */
+let data = JSON.parse(localStorage.getItem("kqursh") || "{}");
+if(!data.general) data.general = [];
+if(!data.game) data.game = [];
 
-<div class="inputBox">
-<input id="msg" placeholder="پیام...">
-<button onclick="send()">Send</button>
-</div>
+/* برای چت بین تب‌ها */
+const bc = new BroadcastChannel("kqursh");
 
-</div>
-
-<!-- PANEL -->
-<div class="right">
-
-<h3>👤 Login</h3>
-<input id="username" placeholder="نام">
-<button onclick="login()">Login</button>
-
-<hr>
-
-<h3>🛡 Admin</h3>
-<input id="target" placeholder="UID">
-<button onclick="kick()">Kick</button>
-<button onclick="ban()">Ban</button>
-
-<p class="small">Role-based Discord system</p>
-
-</div>
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-getFirestore,
-collection,
-addDoc,
-onSnapshot,
-query,
-doc,
-setDoc,
-getDoc,
-deleteDoc
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-import {
-getAuth,
-signInAnonymously,
-onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-/* 🔴 Firebase config */
-const firebaseConfig = {
-apiKey: "YOUR_API_KEY",
-authDomain: "YOUR_PROJECT.firebaseapp.com",
-projectId: "YOUR_PROJECT_ID"
+bc.onmessage = (e)=>{
+  const msg = e.data;
+  data[msg.room].push(msg);
+  save();
+  if(msg.room === room) render();
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-signInAnonymously(auth);
-
-let uid=null;
-let name=null;
-let role="user";
-let server="K⨆Rsh";
-
-const chatRef=collection(db,"chat");
-const usersRef=collection(db,"users");
-const banRef=collection(db,"banned");
-
-/* AUTH */
-onAuthStateChanged(auth,(user)=>{
-if(user){
-uid=user.uid;
-}
-});
-
-/* LOGIN */
-window.login=async function(){
-name=document.getElementById("username").value;
-if(!name) return;
-
-await setDoc(doc(usersRef,uid),{
-uid,
-name,
-role:"user"
-});
-
-let snap=await getDoc(doc(usersRef,uid));
-if(snap.exists()){
-role=snap.data().role;
+function save(){
+  localStorage.setItem("kqursh", JSON.stringify(data));
 }
 
-document.getElementById("status").innerText=
-name+" | "+role;
+/* تغییر روم */
+function switchRoom(r){
+  room = r;
+  document.getElementById("title").innerText = "# " + r;
+  render();
 }
 
-/* SERVER SWITCH */
-window.setServer=function(s){
-server=s;
-loadChat();
+/* ارسال پیام */
+function send(){
+  const input = document.getElementById("input");
+  const text = input.value.trim();
+  if(!text) return;
+
+  const msg = {
+    user: username,
+    text,
+    room,
+    time: new Date().toLocaleTimeString()
+  };
+
+  data[room].push(msg);
+  save();
+
+  bc.postMessage(msg);
+
+  input.value = "";
+  render();
 }
 
-/* SEND */
-window.send=async function(){
+/* نمایش پیام‌ها */
+function render(){
+  const box = document.getElementById("messages");
+  box.innerHTML = "";
 
-if(!uid) return alert("Login first");
+  data[room].forEach(m=>{
+    const div = document.createElement("div");
+    div.className = "msg";
+    div.innerHTML = `<b>${m.user}</b>: ${m.text} <small>${m.time}</small>`;
+    box.appendChild(div);
+  });
 
-let ban=await getDoc(doc(banRef,uid));
-if(ban.exists()) return alert("BANNED");
-
-let msg=document.getElementById("msg").value;
-if(!msg) return;
-
-await addDoc(chatRef,{
-uid,
-name,
-text:msg,
-server,
-time:Date.now()
-});
-
-document.getElementById("msg").value="";
+  box.scrollTop = box.scrollHeight;
 }
 
-/* CHAT LOAD */
-function loadChat(){
-onSnapshot(query(chatRef),(snap)=>{
-let chat=document.getElementById("chat");
-chat.innerHTML="";
-
-snap.forEach(d=>{
-let data=d.data();
-if(data.server!==server) return;
-
-chat.innerHTML+=`
-<div class="msg user">
-<b>${data.name}</b>: ${data.text}
-</div>`;
-});
-
-chat.scrollTop=chat.scrollHeight;
-});
-}
-
-loadChat();
-
-/* KICK */
-window.kick=async function(){
-if(role!=="admin") return alert("No permission");
-
-let t=document.getElementById("target").value;
-await deleteDoc(doc(usersRef,t));
-alert("Kicked: "+t);
-}
-
-/* BAN */
-window.ban=async function(){
-if(role!=="admin") return alert("No permission");
-
-let t=document.getElementById("target").value;
-
-await setDoc(doc(banRef,t),{
-banned:true
-});
-
-await deleteDoc(doc(usersRef,t));
-
-alert("Banned: "+t);
-}
-
+render();
 </script>
 
 </body>
