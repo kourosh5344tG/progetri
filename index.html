@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>k⨆Rsh PRO MAX</title>
+<title>k⨆Rsh PRO MAX ULTIMATE</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
 <style>
@@ -14,50 +14,29 @@ body{
     font-family:sans-serif;
     background:#050505;
     color:white;
-    overflow:hidden;
     cursor:none;
 }
 
-/* background */
-body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    background:
-    radial-gradient(circle at 20% 20%, #ff8c0020, transparent 40%),
-    radial-gradient(circle at 80% 30%, #00aaff20, transparent 40%);
-    z-index:-1;
-}
-
-/* cursor */
 #cursor{
-    width:10px;
-    height:10px;
-    background:#ff8c00;
+    width:10px;height:10px;
+    background:#00ffcc;
     position:fixed;
     border-radius:50%;
     pointer-events:none;
-    box-shadow:0 0 15px #ff8c00;
-    z-index:99999;
 }
 
-/* card */
-.card{
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.1);
-    backdrop-filter:blur(10px);
-    border-radius:12px;
+/* layout */
+.container{
+    display:flex;
+    gap:20px;
     padding:20px;
-    margin:20px;
-    max-width:700px;
 }
 
-/* buttons */
-button{
-    padding:10px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
+.card{
+    flex:1;
+    background:rgba(255,255,255,0.05);
+    padding:15px;
+    border-radius:12px;
 }
 
 /* game */
@@ -65,39 +44,33 @@ button{
     display:none;
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,0.95);
+    background:#000;
     z-index:9999;
-    text-align:center;
 }
 
 .target{
-    width:60px;
-    height:60px;
+    width:60px;height:60px;
     background:red;
     border-radius:50%;
     position:absolute;
-    box-shadow:0 0 20px red;
 }
 
 /* chat */
-#chatBox{
-    display:none;
-    position:fixed;
-    bottom:170px;
-    right:20px;
-    width:300px;
-    height:380px;
-    background:#111;
-    border:1px solid #333;
-    border-radius:10px;
-    padding:10px;
-    z-index:99999;
+#chat{
+    height:300px;
+    overflow:auto;
 }
 
-#messages{
-    height:270px;
-    overflow:auto;
-    font-size:13px;
+.msg{
+    padding:5px;
+    margin:5px 0;
+    background:rgba(255,255,255,0.05);
+}
+
+/* leaderboard */
+.rank{
+    padding:5px;
+    border-bottom:1px solid #333;
 }
 </style>
 </head>
@@ -106,486 +79,88 @@ button{
 
 <div id="cursor"></div>
 
-<!-- buttons -->
-<button onclick="startGame()" style="position:fixed;bottom:70px;right:20px;background:#00aaff;">🎮</button>
-<button onclick="toggleChat()" style="position:fixed;bottom:120px;right:20px;background:#00ff88;">💬</button>
+<h2 style="text-align:center;">🔥 k⨆Rsh PRO MAX ULTIMATE</h2>
 
-<h1 style="text-align:center;margin-top:60px;">k⨆Rsh PRO MAX</h1>
+<!-- AUTH -->
+<div id="auth" class="card">
+<h3>Login</h3>
+<input id="email" placeholder="email"><br><br>
+<input id="pass" type="password" placeholder="password"><br><br>
+<button onclick="signup()">Sign Up</button>
+<button onclick="login()">Login</button>
+</div>
+
+<!-- MAIN -->
+<div class="container">
 
 <div class="card">
-<h2>🔥 Gaming Hub</h2>
-<p>CS2 • Esports • Skins • Community</p>
+<h3>🎮 Game</h3>
+<button onclick="startGame()">Start</button>
+<h4>Score: <span id="score">0</span></h4>
+</div>
+
+<div class="card">
+<h3>💬 Chat</h3>
+<div id="chat"></div>
+<input id="msg">
+<button onclick="sendMsg()">Send</button>
+</div>
+
+<div class="card">
+<h3>🏆 Leaderboard</h3>
+<div id="board"></div>
+</div>
+
 </div>
 
 <!-- GAME -->
 <div id="game">
-<h1>🎯 Game</h1>
-<h2>Score: <span id="score">0</span></h2>
-<div class="target" id="target" onclick="hit()"></div>
-<br>
-<button onclick="exitGame()">Exit</button>
-</div>
-
-<!-- CHAT -->
-<div id="chatBox">
-<div id="messages"></div>
-<input id="msg" placeholder="message..." style="width:100%;padding:6px;">
-<button onclick="sendMsg()" style="width:100%;margin-top:5px;">Send</button>
+<div class="target" onclick="hit()"></div>
 </div>
 
 <script>
 
 /* cursor */
-document.addEventListener("mousemove",(e)=>{
+document.addEventListener("mousemove",e=>{
     let c=document.getElementById("cursor");
     c.style.left=e.clientX+"px";
     c.style.top=e.clientY+"px";
 });
 
-/* game */
-let score=0;
-
-function startGame(){
-    document.getElementById("game").style.display="block";
-    score=0;
-    document.getElementById("score").innerText=score;
-    moveTarget();
-}
-
-function exitGame(){
-    document.getElementById("game").style.display="none";
-}
-
-function hit(){
-    score++;
-    document.getElementById("score").innerText=score;
-    moveTarget();
-}
-
-function moveTarget(){
-    let t=document.getElementById("target");
-    t.style.left=Math.random()*80+"vw";
-    t.style.top=Math.random()*80+"vh";
-}
-
-/* FIREBASE (IMPORTANT FIX) */
+/* firebase */
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com/",
-  projectId: "YOUR_PROJECT"
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  databaseURL: "YOUR_DB",
 };
 
 firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
 const db = firebase.database();
-const chatRef = db.ref("chat");
 
-/* chat */
-function toggleChat(){
-    let box=document.getElementById("chatBox");
-    box.style.display = box.style.display==="block"?"none":"block";
+let user = null;
+
+/* AUTH */
+function signup(){
+    auth.createUserWithEmailAndPassword(
+        email.value,
+        pass.value
+    );
 }
 
-function sendMsg(){
-    let msg=document.getElementById("msg").value;
-    if(!msg) return;
-
-    chatRef.push({
-        text: msg,
-        time: Date.now()
-    });
-
-    document.getElementById("msg").value="";
+function login(){
+    auth.signInWithEmailAndPassword(
+        email.value,
+        pass.value
+    );
 }
 
-/* FIX: جلوگیری از تکرار پیام‌ها */
-chatRef.on("child_added",(data)=>{
-    let m=data.val();
-
-    let div=document.createElement("div");
-    div.innerText="🧑 "+m.text;
-
-    document.getElementById("messages").appendChild(div);
-
-    let box=document.getElementById("messages");
-    box.scrollTop = box.scrollHeight;
-});
-
-</script>
-
-</body>
-</html>
-<!-- 💬 CHAT -->
-<div id="chatBox">
-<div id="messages"></div>
-
-<input id="name" placeholder="username..." style="width:100%;padding:6px;">
-<input id="msg" placeholder="message..." style="width:100%;padding:6px;margin-top:5px;">
-
-<button onclick="sendMsg()" style="width:100%;margin-top:5px;">Send</button>
-<button onclick="adminLogin()" style="width:100%;margin-top:5px;background:#ff8c00;">Admin</button>
-</div>
-let isAdmin = false;
-
-/* send message */
-function sendMsg(){
-    let name = document.getElementById("name").value || "Guest";
-    let msg = document.getElementById("msg").value;
-
-    if(!msg) return;
-
-    chatRef.push({
-        name:name,
-        text:msg,
-        admin:isAdmin,
-        time:Date.now()
-    });
-
-    document.getElementById("msg").value="";
-}
-
-/* receive */
-chatRef.on("child_added",(data)=>{
-    let m=data.val();
-
-    let div=document.createElement("div");
-    div.style.margin="6px 0";
-
-    if(m.admin){
-        div.innerHTML = "👑 <b style='color:#ff8c00'>ADMIN</b>: "+m.text;
-    }else{
-        div.innerHTML = "🧑 "+m.name+": "+m.text;
+auth.onAuthStateChanged(u=>{
+    if(u){
+        user = u;
+        document.getElementById("auth").style.display="none";
     }
-
-    document.getElementById("messages").appendChild(div);
-
-    let box=document.getElementById("messages");
-    box.scrollTop = box.scrollHeight;
-});
-
-/* admin login */
-function adminLogin(){
-    let pass = prompt("Enter admin password:");
-
-    if(pass === "123456"){
-        isAdmin = true;
-        alert("Admin mode ON 👑");
-    }else{
-        alert("Wrong password ❌");
-    }
-}
-<div id="chatBox">
-<div id="messages"></div>
-
-<input id="name" placeholder="username..." style="width:100%;padding:6px;">
-<input id="msg" placeholder="message..." style="width:100%;padding:6px;margin-top:5px;">
-
-<button onclick="sendMsg()" style="width:100%;margin-top:5px;">Send</button>
-<button onclick="adminLogin()" style="width:100%;margin-top:5px;background:#ff8c00;">Admin</button>
-</div>
-.msg{
-    padding:6px;
-    margin:5px 0;
-    border-radius:8px;
-    background:rgba(255,255,255,0.05);
-}
-
-.me{
-    color:#00aaff;
-}
-
-.admin{
-    color:#ff8c00;
-    font-weight:bold;
-}
-let isAdmin = false;
-
-/* username save */
-if(localStorage.getItem("name")){
-    document.getElementById("name").value = localStorage.getItem("name");
-}
-
-document.getElementById("name").addEventListener("change",(e)=>{
-    localStorage.setItem("name",e.target.value);
-});
-
-/* send message */
-function sendMsg(){
-    let name = document.getElementById("name").value || "Guest";
-    let msg = document.getElementById("msg").value;
-
-    if(!msg) return;
-
-    chatRef.push({
-        name:name,
-        text:msg,
-        admin:isAdmin,
-        time:Date.now()
-    });
-
-    document.getElementById("msg").value="";
-}
-
-/* receive */
-chatRef.on("child_added",(data)=>{
-    let m=data.val();
-
-    let div=document.createElement("div");
-    div.classList.add("msg");
-
-    if(m.admin){
-        div.innerHTML = "👑 ADMIN: "+m.text;
-        div.classList.add("admin");
-    }else{
-        div.innerHTML = "🧑 "+m.name+": "+m.text;
-    }
-
-    /* delete button for admin */
-    if(isAdmin){
-        let del=document.createElement("button");
-        del.innerText="🗑";
-        del.style.float="right";
-        del.style.background="red";
-        del.style.color="white";
-
-        del.onclick=()=>chatRef.child(data.key).remove();
-
-        div.appendChild(del);
-    }
-
-    document.getElementById("messages").appendChild(div);
-
-    let box=document.getElementById("messages");
-    box.scrollTop = box.scrollHeight;
-});
-
-/* admin login */
-function adminLogin(){
-    let pass = prompt("Admin password:");
-
-    if(pass === "123456789"){
-        isAdmin = true;
-        alert("👑 Admin Mode ON");
-    }else{
-        alert("Wrong password ❌");
-    }
-}
-<body>
-    <!-- 📰 CS2 NEWS SECTION -->
-<div class="card">
-  <h2>📰 CS2 Latest News</h2>
-
-  <div id="news"></div>
-</div>
-
-<style>
-.news-item{
-    background:rgba(255,255,255,0.05);
-    padding:10px;
-    margin:10px 0;
-    border-radius:10px;
-    border:1px solid rgba(255,255,255,0.1);
-    transition:0.3s;
-}
-
-.news-item:hover{
-    transform:scale(1.02);
-    border-color:#00aaff;
-}
-.news-title{
-    color:#00aaff;
-    font-weight:bold;
-}
-.news-time{
-    font-size:11px;
-    opacity:0.6;
-}
-</style>
-
-<script>
-// 📰 CS2 NEWS DATA (قابل تغییر)
-const cs2News = [
-  {
-    title: "Cache returned to CS2 matchmaking",
-    text: "Classic map Cache is back in Competitive and Casual modes.",
-    time: "2026-04"
-  },
-  {
-    title: "CS2 Major updates & sticker system changed",
-    text: "Valve updated Major shop with new sticker favorites and pricing system.",
-    time: "2026-05"
-  },
-  {
-    title: "Gameplay changes in CS2 update",
-    text: "Reloading system, ammo mechanics and animations improved.",
-    time: "2026-03"
-  }
-];
-
-// 📌 render news
-let newsBox = document.getElementById("news");
-
-cs2News.forEach(n=>{
-    let div = document.createElement("div");
-    div.className = "news-item";
-    div.innerHTML = `
-        <div class="news-title">🔥 ${n.title}</div>
-        <div>${n.text}</div>
-        <div class="news-time">⏱ ${n.time}</div>
-    `;
-    newsBox.appendChild(div);
-});
-</script>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>k⨆Rsh PRO MAX</title>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-
-<style>
-body{
-    margin:0;
-    font-family:sans-serif;
-    background:#050505;
-    color:white;
-    cursor:none;
-    overflow-x:hidden;
-}
-
-/* background */
-body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    background:
-    radial-gradient(circle at 20% 20%, #ff8c0020, transparent 40%),
-    radial-gradient(circle at 80% 30%, #00aaff20, transparent 40%);
-    z-index:-1;
-}
-
-/* cursor */
-#cursor{
-    width:10px;
-    height:10px;
-    background:#ff8c00;
-    position:fixed;
-    border-radius:50%;
-    pointer-events:none;
-    box-shadow:0 0 15px #ff8c00;
-    z-index:99999;
-}
-
-/* cards */
-.card{
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.1);
-    backdrop-filter:blur(10px);
-    border-radius:12px;
-    padding:20px;
-    margin:20px;
-}
-
-/* buttons */
-button{
-    padding:10px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-/* game */
-#game{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.95);
-    text-align:center;
-    z-index:9999;
-}
-
-.target{
-    width:60px;
-    height:60px;
-    background:red;
-    border-radius:50%;
-    position:absolute;
-    box-shadow:0 0 20px red;
-}
-
-/* chat */
-#chatBox{
-    display:none;
-    position:fixed;
-    bottom:170px;
-    right:20px;
-    width:300px;
-    height:380px;
-    background:#111;
-    border:1px solid #333;
-    border-radius:10px;
-    padding:10px;
-    z-index:99999;
-}
-
-#messages{
-    height:270px;
-    overflow:auto;
-    font-size:13px;
-}
-
-/* news */
-.news{
-    padding:10px;
-    margin:10px 0;
-    background:rgba(255,255,255,0.05);
-    border-radius:10px;
-}
-</style>
-</head>
-
-<body>
-
-<div id="cursor"></div>
-
-<!-- buttons -->
-<button onclick="startGame()" style="position:fixed;bottom:70px;right:20px;background:#00aaff;">🎮</button>
-<button onclick="toggleChat()" style="position:fixed;bottom:120px;right:20px;background:#00ff88;">💬</button>
-
-<h1 style="text-align:center;margin-top:60px;">k⨆Rsh PRO MAX</h1>
-
-<!-- NEWS -->
-<div class="card">
-<h2>📰 CS2 News</h2>
-<div id="news"></div>
-</div>
-
-<!-- GAME -->
-<div id="game">
-<h1>🎯 Headshot Game</h1>
-<h2>Score: <span id="score">0</span></h2>
-<div class="target" id="target" onclick="hit()"></div>
-<br>
-<button onclick="exitGame()">Exit</button>
-</div>
-
-<!-- CHAT -->
-<div id="chatBox">
-<div id="messages"></div>
-<input id="msg" placeholder="message..." style="width:100%;padding:6px;">
-<button onclick="sendMsg()" style="width:100%;margin-top:5px;">Send</button>
-</div>
-
-<script>
-
-/* cursor */
-document.addEventListener("mousemove",(e)=>{
-    let c=document.getElementById("cursor");
-    c.style.left=e.clientX+"px";
-    c.style.top=e.clientY+"px";
 });
 
 /* GAME */
@@ -594,58 +169,62 @@ let score=0;
 function startGame(){
     document.getElementById("game").style.display="block";
     score=0;
-    document.getElementById("score").innerText=score;
-    moveTarget();
-}
-
-function exitGame(){
-    document.getElementById("game").style.display="none";
+    move();
 }
 
 function hit(){
     score++;
-    document.getElementById("score").innerText=score;
-    moveTarget();
+    move();
 }
 
-function moveTarget(){
-    let t=document.getElementById("target");
-    t.style.left=Math.random()*80+"vw";
-    t.style.top=Math.random()*80+"vh";
+function move(){
+    let t=document.querySelector(".target");
+    t.style.left=Math.random()*90+"vw";
+    t.style.top=Math.random()*90+"vh";
 }
 
-/* CHAT (simple local system) */
-function toggleChat(){
-    let box=document.getElementById("chatBox");
-    box.style.display = box.style.display==="block"?"none":"block";
+/* SAVE SCORE */
+function saveScore(){
+    if(!user) return;
+
+    db.ref("scores/"+user.uid).set({
+        email:user.email,
+        score:score
+    });
 }
 
+/* CHAT */
 function sendMsg(){
-    let msg=document.getElementById("msg").value;
-    if(!msg) return;
+    if(!user) return;
 
-    let div=document.createElement("div");
-    div.innerText="🧑 "+msg;
-    document.getElementById("messages").appendChild(div);
+    db.ref("chat").push({
+        name:user.email,
+        text:msg.value
+    });
 
-    document.getElementById("msg").value="";
+    msg.value="";
 }
 
-/* NEWS */
-const newsData = [
-  "🔥 CS2 update improved movement physics",
-  "🎯 New anti-cheat system testing started",
-  "💰 Skin market prices increased again",
-  "🏆 Upcoming Major tournament announced"
-];
-
-let newsBox=document.getElementById("news");
-
-newsData.forEach(n=>{
+db.ref("chat").on("child_added",snap=>{
+    let m=snap.val();
     let div=document.createElement("div");
-    div.className="news";
-    div.innerText=n;
-    newsBox.appendChild(div);
+    div.className="msg";
+    div.innerText=m.name+": "+m.text;
+    chat.appendChild(div);
+});
+
+/* LEADERBOARD */
+db.ref("scores").on("value",snap=>{
+    board.innerHTML="";
+
+    let data=snap.val();
+
+    for(let i in data){
+        let div=document.createElement("div");
+        div.className="rank";
+        div.innerText=data[i].email+" - "+data[i].score;
+        board.appendChild(div);
+    }
 });
 
 </script>
@@ -654,44 +233,220 @@ newsData.forEach(n=>{
 </html>
 const express = require("express");
 const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
 const cors = require("cors");
-const mongoSanitize = require("express-mongo-sanitize");
-const xss = require("xss-clean");
 
 const app = express();
 
-// 🔒 امنیت هدرهای HTTP
 app.use(helmet());
-
-// 🌐 محدود کردن دسترسی (CORS)
-app.use(cors({
-  origin: "https://your-domain.com",
-  methods: ["GET", "POST", "PUT", "DELETE"]
-}));
-
-// 🚫 جلوگیری از SQL/NoSQL Injection
-app.use(mongoSanitize());
-
-// 🧼 جلوگیری از XSS
-app.use(xss());
-
-// ⛔ محدود کردن درخواست‌ها (Rate Limit)
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 دقیقه
-  max: 100 // هر IP نهایت 100 درخواست
-});
-
-app.use(limiter);
-
-// 📦 JSON body
+app.use(cors());
 app.use(express.json());
 
-// تست سرور
-app.get("/", (req, res) => {
-  res.send("Secure Server is running 🔐");
+let users = [];
+let scores = [];
+
+app.post("/score",(req,res)=>{
+    scores.push(req.body);
+    res.json({ok:true});
 });
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+app.get("/leaderboard",(req,res)=>{
+    res.json(scores.sort((a,b)=>b.score-a.score));
 });
+
+app.listen(3000,()=>console.log("Server running"));
+npm init -y
+npm install express socket.io
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+app.use(express.static("public"));
+
+let players = {};
+
+io.on("connection", (socket) => {
+
+    console.log("User connected:", socket.id);
+
+    players[socket.id] = {
+        x: Math.random() * 500,
+        y: Math.random() * 500,
+        score: 0
+    };
+
+    io.emit("players", players);
+
+    socket.on("move", (data) => {
+        if(players[socket.id]){
+            players[socket.id].x = data.x;
+            players[socket.id].y = data.y;
+        }
+        io.emit("players", players);
+    });
+
+    socket.on("hit", () => {
+        if(players[socket.id]){
+            players[socket.id].score++;
+        }
+        io.emit("players", players);
+    });
+
+    socket.on("disconnect", () => {
+        delete players[socket.id];
+        io.emit("players", players);
+    });
+
+});
+
+server.listen(3000, () => {
+    console.log("Multiplayer running on port 3000");
+});
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Multiplayer Game</title>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<style>
+body{
+    margin:0;
+    background:#111;
+    overflow:hidden;
+    color:white;
+}
+
+.player{
+    width:30px;
+    height:30px;
+    background:red;
+    position:absolute;
+    border-radius:50%;
+}
+</style>
+</head>
+
+<body>
+
+<script>
+const socket = io();
+
+let players = {};
+let myId = null;
+
+socket.on("connect",()=>{
+    myId = socket.id;
+});
+
+socket.on("players",(data)=>{
+    players = data;
+    render();
+});
+
+document.addEventListener("mousemove",(e)=>{
+    socket.emit("move",{
+        x:e.clientX,
+        y:e.clientY
+    });
+});
+
+document.addEventListener("click",()=>{
+    socket.emit("hit");
+});
+
+function render(){
+    document.body.innerHTML = "";
+
+    for(let id in players){
+        let p = players[id];
+
+        let div = document.createElement("div");
+        div.className = "player";
+
+        div.style.left = p.x + "px";
+        div.style.top = p.y + "px";
+
+        div.style.background = id === myId ? "lime" : "red";
+
+        div.title = "Score: " + p.score;
+
+        document.body.appendChild(div);
+    }
+}
+</script>
+
+</body>
+</html>
+body{
+    margin:0;
+    font-family:sans-serif;
+    background:#050510;
+    color:white;
+    overflow:hidden;
+}
+
+/* 🌈 Animated gradient background */
+body::before{
+    content:"";
+    position:fixed;
+    inset:-50%;
+    z-index:-2;
+    background:conic-gradient(
+        from 180deg,
+        #00f5ff,
+        #7a00ff,
+        #ff00c8,
+        #00ff85,
+        #00f5ff
+    );
+    animation:spin 12s linear infinite;
+    filter:blur(120px);
+    opacity:0.6;
+}
+
+/* 🌌 dark overlay grid */
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(0,255,255,0.15), transparent 40%),
+        radial-gradient(circle at 80% 30%, rgba(255,0,200,0.12), transparent 45%),
+        radial-gradient(circle at 50% 80%, rgba(122,0,255,0.10), transparent 50%),
+        linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.95));
+    backdrop-filter: blur(2px);
+}
+
+/* ✨ floating particles */
+.particle{
+    position:fixed;
+    width:4px;
+    height:4px;
+    background:white;
+    border-radius:50%;
+    opacity:0.5;
+    animation:floatUp 10s linear infinite;
+}
+
+/* animations */
+@keyframes spin{
+    from{ transform:rotate(0deg); }
+    to{ transform:rotate(360deg); }
+}
+
+@keyframes floatUp{
+    from{
+        transform:translateY(100vh);
+        opacity:0;
+    }
+    to{
+        transform:translateY(-10vh);
+        opacity:1;
+    }
+}
