@@ -458,4 +458,198 @@ for(let i=0;i<40;i++){
     p.style.opacity=Math.random();
     document.body.appendChild(p);
 }
+    body{
+    margin:0;
+    font-family:sans-serif;
+    background:#050510;
+    overflow:hidden;
+    color:white;
+}
+
+/* 🎧 glowing background layer */
+#bg{
+    position:fixed;
+    inset:-50%;
+    z-index:-2;
+    background:conic-gradient(
+        from 0deg,
+        #00f5ff,
+        #7a00ff,
+        #ff00c8,
+        #00ff85,
+        #00f5ff
+    );
+    filter:blur(120px);
+    opacity:0.6;
+    animation:spin 10s linear infinite;
+}
+
+/* dark overlay */
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    background:radial-gradient(circle, rgba(0,0,0,0.6), rgba(0,0,0,0.95));
+}
+
+@keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+    <div id="bg"></div>
+
+<input type="file" id="audioFile" accept="audio/*">
+<button onclick="playAudio()">Play Music</button>
+let audio = new Audio();
+let context, analyser, source, dataArray;
+
+function playAudio(){
+    let file = document.getElementById("audioFile").files[0];
+    if(!file) return;
+
+    audio.src = URL.createObjectURL(file);
+    audio.play();
+
+    setupAudio();
+}
+
+function setupAudio(){
+    context = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = context.createAnalyser();
+
+    source = context.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(context.destination);
+
+    analyser.fftSize = 64;
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    animate();
+}
+
+function animate(){
+    requestAnimationFrame(animate);
+
+    analyser.getByteFrequencyData(dataArray);
+
+    let avg = dataArray.reduce((a,b)=>a+b)/dataArray.length;
+
+    let bg = document.getElementById("bg");
+
+    /* 🎧 واکنش به صدا */
+    let scale = 1 + avg / 200;
+
+    bg.style.transform = `rotate(${avg}deg) scale(${scale})`;
+    bg.style.filter = `blur(${80 + avg/2}px)`;
+    bg.style.opacity = 0.4 + avg/300;
+}
+    body{
+    margin:0;
+    font-family:Arial;
+    background:#050510;
+    overflow:hidden;
+    color:white;
+}
+
+/* 🎮 top HUD */
+#hudTop{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    padding:10px 20px;
+    font-size:14px;
+    background:rgba(0,0,0,0.3);
+    backdrop-filter:blur(10px);
+}
+
+/* 💰 score box */
+#scoreBox{
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    padding:15px;
+    background:rgba(0,255,255,0.08);
+    border:1px solid rgba(0,255,255,0.3);
+    border-radius:10px;
+    box-shadow:0 0 20px rgba(0,255,255,0.2);
+}
+
+/* 🎯 crosshair */
+#crosshair{
+    position:fixed;
+    left:50%;
+    top:50%;
+    width:20px;
+    height:20px;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+}
+
+#crosshair::before,
+#crosshair::after{
+    content:"";
+    position:absolute;
+    background:#00ffcc;
+    box-shadow:0 0 10px #00ffcc;
+}
+
+#crosshair::before{
+    width:2px;
+    height:20px;
+    left:9px;
+    top:0;
+}
+
+#crosshair::after{
+    width:20px;
+    height:2px;
+    left:0;
+    top:9px;
+}
+
+/* 🔥 hit effect */
+.hit{
+    position:fixed;
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    border:2px solid red;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    animation:hit 0.4s ease-out;
+    pointer-events:none;
+}
+
+@keyframes hit{
+    from{transform:translate(-50%,-50%) scale(0.5); opacity:1;}
+    to{transform:translate(-50%,-50%) scale(2); opacity:0;}
+}
+    <div id="hudTop">
+    <div>🔥 k⨆Rsh PRO MAX</div>
+    <div>ONLINE MODE</div>
+</div>
+
+<div id="scoreBox">
+    Score: <span id="score">0</span>
+</div>
+
+<div id="crosshair"></div>
+let score = 0;
+
+/* 🎯 click = hit effect */
+document.addEventListener("click",()=>{
+    score++;
+    document.getElementById("score").innerText = score;
+
+    let fx = document.createElement("div");
+    fx.className = "hit";
+    document.body.appendChild(fx);
+
+    setTimeout(()=>fx.remove(),400);
+});
     
