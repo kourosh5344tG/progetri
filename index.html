@@ -1,82 +1,285 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>K⨆Rsh</title>
+<title>K⨆Rsh - Cyber Gaming Hub</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
 body{
     margin:0;
     background:#000;
-    color:#0f0;
-    font-family: monospace;
+    color:#fff;
+    font-family:Orbitron;
     overflow-x:hidden;
 }
 
-/* هدر */
+/* ===== Background Glow ===== */
+.bg{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:
+    radial-gradient(circle at top, #0ff2 0%, transparent 40%),
+    radial-gradient(circle at bottom, #f0f2 0%, transparent 40%),
+    #000;
+    z-index:0;
+}
+
+/* ===== Header ===== */
 header{
     text-align:center;
-    padding:20px;
-    font-size:30px;
+    font-size:55px;
+    letter-spacing:10px;
+    padding:25px;
+    text-shadow:0 0 20px #0ff, 0 0 40px #f0f;
+    animation: glow 2s infinite alternate;
+    position:relative;
+    z-index:10;
+}
+
+@keyframes glow{
+    from{filter:brightness(1);}
+    to{filter:brightness(1.5);}
+}
+
+/* ===== Subtitle ===== */
+.sub{
+    text-align:center;
+    opacity:0.7;
+    margin-top:-10px;
     letter-spacing:3px;
-    text-shadow:0 0 10px #0f0;
 }
 
-/* کانتینر اخبار */
-.news{
-    width:80%;
-    margin:40px auto;
-    border:1px solid #0f0;
-    padding:20px;
-    box-shadow:0 0 20px #0f0;
+/* ===== Menu ===== */
+.nav{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin:25px 0;
 }
 
-.news h2{
-    border-bottom:1px solid #0f0;
-    padding-bottom:10px;
+.nav button{
+    background:rgba(255,255,255,0.05);
+    border:1px solid #0ff;
+    color:#0ff;
+    padding:10px 15px;
+    cursor:pointer;
+    transition:0.3s;
 }
 
-.item{
-    margin:15px 0;
+.nav button:hover{
+    background:#0ff;
+    color:#000;
+    box-shadow:0 0 15px #0ff;
+}
+
+/* ===== Sections ===== */
+.section{
+    width:85%;
+    margin:20px auto;
+    display:none;
+    z-index:10;
+    position:relative;
+}
+
+.active{display:block;}
+
+/* ===== Cards ===== */
+.card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(0,255,255,0.3);
+    padding:15px;
+    margin:10px 0;
+    border-radius:12px;
+    backdrop-filter:blur(10px);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:scale(1.03);
+    box-shadow:0 0 20px #0ff;
+}
+
+/* ===== Input ===== */
+input{
+    width:100%;
     padding:10px;
-    border-left:3px solid #0f0;
+    margin:10px 0;
+    background:#111;
+    border:1px solid #0ff;
+    color:#fff;
 }
 
-/* دات دنبال موس */
-.dot{
+/* ===== Button ===== */
+button.submit{
+    width:100%;
+    padding:10px;
+    background:#0ff;
+    border:none;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+/* ===== Particles ===== */
+.particle{
     position:fixed;
-    width:10px;
-    height:10px;
-    background:#0f0;
+    width:3px;
+    height:3px;
+    background:#0ff;
     border-radius:50%;
     pointer-events:none;
-    box-shadow:0 0 15px #0f0;
+    box-shadow:0 0 10px #0ff;
 }
 </style>
 </head>
 
 <body>
 
-<header>K⨆Rsh - CS2 News Terminal</header>
+<div class="bg"></div>
 
-<div class="news">
-    <h2>آخرین اخبار CS2</h2>
+<header>K⨆Rsh</header>
+<div class="sub">CYBER GAMING HUB • CS2 • SKINS • AI SYSTEM</div>
 
-    <div class="item">🎮 آپدیت جدید گرافیکی برای Counter-Strike 2 منتشر شد</div>
-    <div class="item">🔥 تغییرات در سیستم رنکینگ Competitive</div>
-    <div class="item">💣 نقشه Dust2 با بهینه‌سازی جدید برگشت</div>
-    <div class="item">🧠 AI ضدچیت قوی‌تر شد</div>
+<!-- MENU -->
+<div class="nav">
+    <button onclick="show('home')">Home</button>
+    <button onclick="show('ai')">AI System</button>
+    <button onclick="show('cs')">CS2 Universe</button>
+    <button onclick="show('skins')">Weapon Skins</button>
+    <button onclick="show('players')">Pro Players</button>
 </div>
 
-<div class="dot" id="dot"></div>
+<!-- HOME -->
+<div id="home" class="section active">
+    <div class="card">
+        🚀 Welcome to <b>K⨆Rsh Cyber Hub</b><br><br>
+        "Where gaming meets intelligence and style."
+    </div>
+</div>
+
+<!-- AI -->
+<div id="ai" class="section">
+    <div class="card">🧠 K⨆Rsh AI Assistant</div>
+
+    <input id="q" placeholder="Ask anything about CS2...">
+    <button class="submit" onclick="askAI()">Send Query</button>
+
+    <div id="aiChat"></div>
+</div>
+
+<!-- CS2 -->
+<div id="cs" class="section">
+    <div class="card">
+        <h2>🎮 Counter-Strike 2 Universe</h2>
+        <p>"Built on Source 2 engine with next-gen physics and smoke simulation."</p>
+    </div>
+
+    <div class="card">🔥 Feature: Dynamic Smoke System</div>
+    <div class="card">⚡ Feature: Enhanced FPS Optimization</div>
+    <div class="card">🎯 Feature: Improved Hit Registration</div>
+</div>
+
+<!-- SKINS -->
+<div id="skins" class="section">
+    <div class="card">💎 AK-47 | Neon Revolution</div>
+    <div class="card">🔥 Karambit | Dragon Flame</div>
+    <div class="card">⚔️ M4A4 | Cyber Pulse</div>
+</div>
+
+<!-- PLAYERS -->
+<div id="players" class="section">
+    <div class="card">🏆 s1mple — "The God of AWP"</div>
+    <div class="card">⚡ ZywOo — "The Silent Killer"</div>
+    <div class="card">🔥 NiKo — "Mechanical Aim Monster"</div>
+</div>
 
 <script>
-const dot = document.getElementById("dot");
 
-document.addEventListener("mousemove", (e)=>{
-    dot.style.left = e.clientX + "px";
-    dot.style.top = e.clientY + "px";
+/* ===== Tabs ===== */
+function show(id){
+    document.querySelectorAll('.section')
+    .forEach(s=>s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+/* ===== AI SYSTEM ===== */
+function askAI(){
+    let q = document.getElementById("q").value.toLowerCase();
+
+    let reply = "🤖 I am K⨆Rsh AI. Ask me about CS2, weapons, ranks or esports.";
+
+    if(q.includes("cs2")){
+        reply = "🎮 CS2 is powered by Source 2 engine with ultra realistic smoke physics.";
+    }
+    else if(q.includes("skin")){
+        reply = "💎 Skins are cosmetic weapon upgrades with market value & rarity tiers.";
+    }
+    else if(q.includes("rank")){
+        reply = "🏆 Ranking system: Silver → Gold → DMG → Global Elite.";
+    }
+    else if(q.includes("pro")){
+        reply = "🔥 Pro players train over 8 hours daily for competitive dominance.";
+    }
+
+    let div = document.createElement("div");
+    div.className="card";
+    div.innerText="AI: " + reply;
+
+    document.getElementById("aiChat").appendChild(div);
+}
+
+/* ===== Particles Engine ===== */
+const particles=[];
+const mouse={x:innerWidth/2,y:innerHeight/2};
+
+document.addEventListener("mousemove",e=>{
+    mouse.x=e.clientX;
+    mouse.y=e.clientY;
 });
+
+for(let i=0;i<100;i++){
+    particles.push({
+        x:Math.random()*innerWidth,
+        y:Math.random()*innerHeight,
+        vx:0,vy:0
+    });
+}
+
+function animate(){
+    particles.forEach(p=>{
+        let dx=mouse.x-p.x;
+        let dy=mouse.y-p.y;
+        let dist=Math.sqrt(dx*dx+dy*dy);
+
+        if(dist<160){
+            p.vx+=dx*0.002;
+            p.vy+=dy*0.002;
+        }
+
+        p.vx*=0.92;
+        p.vy*=0.92;
+
+        p.x+=p.vx;
+        p.y+=p.vy;
+
+        if(!p.el){
+            p.el=document.createElement("div");
+            p.el.className="particle";
+            document.body.appendChild(p.el);
+        }
+
+        p.el.style.left=p.x+"px";
+        p.el.style.top=p.y+"px";
+    });
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
 </script>
 
 </body>
