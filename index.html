@@ -1,118 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CS2 HUB</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS2 HUB PRO</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Orbitron;
+:root{
+  --bg:#05070d;
+  --panel:#0f172a;
+  --neon:#00f7ff;
+  --orange:#ff7a00;
+  --text:#cbd5e1;
 }
 
+*{margin:0;padding:0;box-sizing:border-box;font-family:Orbitron;}
+
 body{
-    background:#0b0c10;
-    color:#c5c6c7;
+  background:radial-gradient(circle at top,#0d1b3d,#05070d);
+  color:var(--text);
 }
 
 /* HEADER */
 header{
-    display:flex;
-    justify-content:space-between;
-    padding:20px;
-    background:#1f2833;
-    position:sticky;
-    top:0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 30px;
+  background:rgba(15,23,42,.8);
+  backdrop-filter:blur(10px);
+  position:sticky;
+  top:0;
+  border-bottom:1px solid #1e293b;
 }
 
-header a{
-    color:#c5c6c7;
-    margin:0 10px;
-    text-decoration:none;
+.logo{
+  color:var(--neon);
+  font-weight:bold;
+  text-shadow:0 0 10px var(--neon);
 }
 
-header a:hover{
-    color:#66fcf1;
+nav button{
+  background:none;
+  border:none;
+  color:var(--text);
+  margin:0 8px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+nav button:hover{
+  color:var(--neon);
+  transform:scale(1.1);
 }
 
 /* SECTIONS */
 section{
-    display:none;
-    padding:40px;
+  display:none;
+  padding:40px;
+  animation:fade .4s ease;
 }
 
-.active{
-    display:block;
+.active{display:block;}
+
+@keyframes fade{
+  from{opacity:0;transform:translateY(15px);}
+  to{opacity:1;transform:translateY(0);}
 }
 
 /* HERO */
 .hero{
-    text-align:center;
-    padding:80px 20px;
-    background:linear-gradient(135deg,#1f2833,#45a29e);
+  height:70vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
 }
 
 .hero h1{
-    font-size:40px;
-    color:white;
+  font-size:50px;
+  color:var(--neon);
+  text-shadow:0 0 20px var(--neon);
 }
 
-.btn{
-    padding:10px 20px;
-    background:#66fcf1;
-    border:none;
-    cursor:pointer;
-    margin-top:20px;
+.glow{
+  padding:12px 20px;
+  background:var(--neon);
+  border:none;
+  cursor:pointer;
+  margin-top:20px;
+  color:black;
+  font-weight:bold;
+  box-shadow:0 0 20px var(--neon);
+  border-radius:8px;
 }
 
 /* GRID */
 .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
 }
 
 .card{
-    background:#1f2833;
-    padding:20px;
-    border-radius:10px;
+  background:linear-gradient(145deg,#0f172a,#0b1220);
+  border:1px solid #1e293b;
+  padding:15px;
+  border-radius:12px;
+  transition:.3s;
 }
 
-input,textarea{
-    width:100%;
-    padding:10px;
-    margin:10px 0;
+.card:hover{
+  transform:translateY(-8px);
+  border-color:var(--neon);
+  box-shadow:0 0 20px rgba(0,247,255,.2);
+}
+
+.card button{
+  margin-top:10px;
+  background:var(--orange);
+  border:none;
+  padding:8px;
+  cursor:pointer;
+  border-radius:6px;
 }
 
 /* CHAT */
 .chat-box{
-    height:200px;
-    overflow:auto;
-    background:#111;
-    padding:10px;
-    margin-bottom:10px;
+  height:250px;
+  overflow:auto;
+  background:#0b1220;
+  border:1px solid #1e293b;
+  padding:10px;
+  border-radius:10px;
 }
 
 .msg{
-    padding:5px;
-    border-bottom:1px solid #333;
+  padding:6px;
+  border-bottom:1px solid #1e293b;
 }
 
-/* NAV BUTTON */
-nav button{
-    background:none;
-    border:none;
-    color:#c5c6c7;
-    cursor:pointer;
+/* XP BAR */
+.xp{
+  width:100%;
+  height:20px;
+  background:#111827;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:10px;
 }
 
-nav button:hover{
-    color:#66fcf1;
+.xp-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#00f7ff,#ff7a00);
+  transition:.4s;
+}
+
+/* INPUT */
+input{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+  border-radius:6px;
+  border:none;
+  background:#0b1220;
+  color:white;
+  border:1px solid #1e293b;
 }
 </style>
 </head>
@@ -120,105 +177,149 @@ nav button:hover{
 <body>
 
 <header>
-    <div>CS2 HUB</div>
-    <nav>
-        <button onclick="show('home')">Home</button>
-        <button onclick="show('shop')">Shop</button>
-        <button onclick="show('profile')">Profile</button>
-        <button onclick="show('chat')">Chat</button>
-        <button onclick="show('news')">News</button>
-        <button onclick="show('admin')">Admin</button>
-    </nav>
+  <div class="logo">CS2 HUB PRO</div>
+  <nav>
+    <button onclick="show('home')">Home</button>
+    <button onclick="show('shop')">Shop</button>
+    <button onclick="show('profile')">Profile</button>
+    <button onclick="show('inventory')">Inventory</button>
+    <button onclick="show('chat')">Chat</button>
+    <button onclick="show('news')">News</button>
+  </nav>
 </header>
 
 <!-- HOME -->
 <section id="home" class="active">
-    <div class="hero">
-        <h1>WELCOME TO CS2 HUB</h1>
-        <p>Ultimate Counter Strike 2 Experience</p>
-        <button class="btn" onclick="show('shop')">Go Shop</button>
-    </div>
+  <div class="hero">
+    <h1>CS2 PRO HUB</h1>
+    <p>Elite Gaming Experience Platform</p>
+    <button class="glow" onclick="show('shop')">ENTER</button>
+  </div>
 </section>
 
 <!-- SHOP -->
 <section id="shop">
-    <h2>SHOP</h2>
-    <div class="grid">
-        <div class="card">
-            <h3>AK-47 Redline</h3>
-            <button onclick="addCart('AK-47 Redline')">Buy</button>
-        </div>
-        <div class="card">
-            <h3>AWP Dragon Lore</h3>
-            <button onclick="addCart('AWP Dragon Lore')">Buy</button>
-        </div>
-        <div class="card">
-            <h3>M4A4 Howl</h3>
-            <button onclick="addCart('M4A4 Howl')">Buy</button>
-        </div>
+  <h2>🔥 SKIN MARKET</h2>
+  <div class="grid">
+    <div class="card">
+      AK-47 Neon Rider
+      <button onclick="buy('AK-47 Neon Rider')">Buy</button>
     </div>
-    <h3>Cart:</h3>
-    <div id="cart"></div>
+    <div class="card">
+      AWP Dragon Lore
+      <button onclick="buy('AWP Dragon Lore')">Buy</button>
+    </div>
+    <div class="card">
+      M4A4 Howl
+      <button onclick="buy('M4A4 Howl')">Buy</button>
+    </div>
+  </div>
 </section>
 
 <!-- PROFILE -->
 <section id="profile">
-    <h2>PROFILE</h2>
-    <input id="user" placeholder="Username">
-    <button onclick="login()">Login</button>
-    <p id="welcome"></p>
+  <h2>👤 PROFILE</h2>
+  <input id="name" placeholder="Username">
+  <button class="glow" onclick="login()">Login</button>
+
+  <p id="userText"></p>
+  <p id="levelText"></p>
+
+  <div class="xp">
+    <div class="xp-bar" id="xpBar"></div>
+  </div>
+</section>
+
+<!-- INVENTORY -->
+<section id="inventory">
+  <h2>🎒 INVENTORY</h2>
+  <div class="grid" id="inv"></div>
 </section>
 
 <!-- CHAT -->
 <section id="chat">
-    <h2>CHAT ROOM</h2>
-    <div class="chat-box" id="chatBox"></div>
-    <input id="msg" placeholder="Message">
-    <button onclick="sendMsg()">Send</button>
+  <h2>💬 CHAT</h2>
+  <div class="chat-box" id="chatBox"></div>
+  <input id="msg" placeholder="message">
+  <button class="glow" onclick="send()">Send</button>
 </section>
 
 <!-- NEWS -->
 <section id="news">
-    <h2>CS2 NEWS</h2>
-    <div class="card">New Update Released!</div>
-    <div class="card">Pro tournaments announced</div>
-</section>
-
-<!-- ADMIN -->
-<section id="admin">
-    <h2>ADMIN PANEL</h2>
-    <input placeholder="Add item name">
-    <button onclick="alert('Feature demo')">Add</button>
+  <h2>📰 NEWS</h2>
+  <div class="card">New CS2 update released</div>
+  <div class="card">Major tournament announced</div>
 </section>
 
 <script>
-function show(id){
-    document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+
+let user = {
+  name:"",
+  xp:0,
+  level:1,
+  inventory:[]
+};
+
+/* LOAD SAVE */
+if(localStorage.getItem("cs2")){
+  user = JSON.parse(localStorage.getItem("cs2"));
 }
 
-/* CART */
-let cart = [];
+/* SAVE */
+function save(){
+  localStorage.setItem("cs2",JSON.stringify(user));
+}
 
-function addCart(item){
-    cart.push(item);
-    document.getElementById('cart').innerHTML = cart.map(i=>"<div>"+i+"</div>").join("");
+/* NAV */
+function show(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 
 /* LOGIN */
 function login(){
-    let u = document.getElementById('user').value;
-    document.getElementById('welcome').innerText = "Welcome " + u;
+  user.name = document.getElementById("name").value;
+  save();
+  updateUI();
+}
+
+/* BUY */
+function buy(item){
+  user.inventory.push(item);
+  user.xp += 20;
+
+  if(user.xp >= 100){
+    user.level++;
+    user.xp = 0;
+  }
+
+  save();
+  updateUI();
+}
+
+/* UPDATE UI */
+function updateUI(){
+  document.getElementById("userText").innerText = "Player: " + user.name;
+  document.getElementById("levelText").innerText = "Level: " + user.level;
+
+  document.getElementById("xpBar").style.width = user.xp + "%";
+
+  document.getElementById("inv").innerHTML =
+    user.inventory.map(i=>`<div class="card">${i}</div>`).join("");
 }
 
 /* CHAT */
-function sendMsg(){
-    let msg = document.getElementById('msg').value;
-    if(!msg) return;
-    let box = document.getElementById('chatBox');
-    box.innerHTML += "<div class='msg'>" + msg + "</div>";
-    document.getElementById('msg').value = "";
+function send(){
+  let msg = document.getElementById("msg").value;
+  if(!msg) return;
+
+  document.getElementById("chatBox").innerHTML +=
+    `<div class="msg">🎯 ${msg}</div>`;
 }
+
+/* INIT */
+updateUI();
+
 </script>
 
 </body>
